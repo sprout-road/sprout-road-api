@@ -1,12 +1,9 @@
 spring:
-  servlet:
-    multipart:
-      enabled: true
-      max-file-size: 50MB
-      max-request-size: 200MB
+  profiles:
+    active: default
+  config:
+    import: optional:file:.env[.properties], classpath:/config/web.yml, classpath:/config/db.yml
 
 logging:
   level:
     com.strout.api: DEBUG
-  pattern:
-    console: '%d{HH:mm:ss} %-5level %logger{36} - %msg%n'
