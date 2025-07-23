@@ -17,16 +17,39 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+
+    all*.exclude group: 'javax.media'
 }
 
 repositories {
     mavenCentral()
+
+    // GeoTools 전용 저장소
+    maven { url 'https://repo.osgeo.org/repository/release/' }
 }
 
+// GeoTools 버전
+ext {
+    geoToolsVersion = '33.0'
+}
+
+
 dependencies {
+    // spring
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+    // lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+
+    // GeoTools (명시적 버전 필요 - Spring Boot BOM에 없음)
+    implementation "org.geotools:gt-shapefile:${geoToolsVersion}"
+    implementation "org.geotools:gt-epsg-hsql:${geoToolsVersion}"
+    implementation "org.geotools:gt-referencing:${geoToolsVersion}"
+    implementation "org.geotools:gt-geojson:${geoToolsVersion}"
+
+    // test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
