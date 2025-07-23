@@ -29,6 +29,11 @@ public class adminController {
         return "admin/upload";
     }
 
+    @GetMapping("/map-test")
+    public String getTestPage() {
+        return "admin/map-test";
+    }
+
     @PostMapping("/upload/shapefile/sido")
     public String uploadSidoShapefile(
         @RequestParam("shpFile") MultipartFile shpFile,

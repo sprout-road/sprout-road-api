@@ -1,0 +1,8 @@
+gis:
+  coordinate:
+    force-xy: true
+    source-epsg: ${GIS_SOURCE_EPSG}
+    target-epsg: ${GIS_TARGET_EPSG}
+  system-properties:
+    org.geotools.referencing.forceXY: "true"
+    org.geotools.referencing.caching.enabled: "true"

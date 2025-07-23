@@ -2,7 +2,11 @@ spring:
   profiles:
     active: default
   config:
-    import: optional:file:.env[.properties], classpath:/config/web.yml, classpath:/config/db.yml
+    import:
+      - optional:file:.env[.properties]
+      - classpath:/config/web.yml
+      - classpath:/config/db.yml
+      - classpath:/config/gis.yml
 
 logging:
   level:
