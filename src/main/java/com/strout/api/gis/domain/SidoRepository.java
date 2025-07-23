@@ -1,6 +1,10 @@
 package com.strout.api.gis.domain;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
 
-public interface SidoRepository extends JpaRepository<Sido, Long> {
+public interface SidoRepository {
+
+    long count();
+    void saveAll(List<Sido> sidos);
+    String findAllAsGeoJson();
 }

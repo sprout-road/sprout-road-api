@@ -1,6 +1,11 @@
 package com.strout.api.gis.domain;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
 
-public interface SigunguRepository extends JpaRepository<Sigungu, Long> {
+public interface SigunguRepository {
+
+    long count();
+    void saveAll(List<Sigungu> sigungus);
+    String findAllAsGeoJson();
+    String findBySidoCodeAsGeoJson(String sidoCode);
 }

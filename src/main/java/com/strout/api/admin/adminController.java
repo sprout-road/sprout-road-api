@@ -1,4 +1,4 @@
-package com.strout.api.gis.ui.web;
+package com.strout.api.admin;
 
 import com.strout.api.gis.application.SidoGisService;
 import com.strout.api.gis.application.SigunguGisService;
@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 @RequestMapping("/admin")
 @RequiredArgsConstructor
-public class GisController {
+public class adminController {
 
     private final SidoGisService sidoGisService;
     private final SigunguGisService sigunguGisService;
