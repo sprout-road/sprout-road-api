@@ -1,6 +1,15 @@
 package com.strout.api.gis.infrastructure.geotools;
 
+import com.strout.api.gis.application.ShapefileParsingStrategy;
 import com.strout.api.gis.application.command.ShapefileUploadCommand;
+import com.strout.api.gis.domain.ShapefileType;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.geotools.api.data.SimpleFeatureSource;
 import org.geotools.api.feature.simple.SimpleFeature;
@@ -12,59 +21,44 @@ import org.geotools.data.simple.SimpleFeatureIterator;
 import org.locationtech.jts.geom.Geometry;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
-import java.util.HashMap;
-import java.util.Map;
-
-@Slf4j
 @Component
-public class ShapefileParser {
+@Slf4j
+public class SidoParsingStrategy implements ShapefileParsingStrategy {
 
-    /**
-     * 시/도 Shapefile 파싱
-     */
-    public void parseSidoShapefile(ShapefileUploadCommand command) {
+    @Override
+    public void parse(ShapefileUploadCommand command) {
         try {
-            // 임시 Shapefile 세트 생성
             File tempShpFile = createTemporaryShapefileSet(command);
-
-            // 실제 파싱 수행
             parseSidoData(tempShpFile);
-
         } catch (Exception e) {
             log.error("시/도 Shapefile 파싱 실패: {}", e.getMessage(), e);
             throw new RuntimeException("시/도 Shapefile 파싱 실패", e);
         }
     }
 
+    @Override
+    public boolean supports(ShapefileType type) {
+        return type == ShapefileType.SIDO;
+    }
+
     /**
      * Shapefile 세트 임시 파일 생성 (자동 삭제됨)
      */
     private File createTemporaryShapefileSet(ShapefileUploadCommand command) throws IOException {
-        // 고유한 파일명 접두사 생성
         String uniqueId = "shapefile_" + System.currentTimeMillis() + "_" + Thread.currentThread().getId();
-
-        // 임시 디렉토리 생성
         File tempDir = Files.createTempDirectory("shapefile_upload").toFile();
         tempDir.deleteOnExit();
 
-        // 같은 이름으로 4개 파일 생성
         File tempShpFile = new File(tempDir, uniqueId + ".shp");
         File tempDbfFile = new File(tempDir, uniqueId + ".dbf");
         File tempShxFile = new File(tempDir, uniqueId + ".shx");
         File tempPrjFile = new File(tempDir, uniqueId + ".prj");
 
-        // 자동 삭제 설정
         tempShpFile.deleteOnExit();
         tempDbfFile.deleteOnExit();
         tempShxFile.deleteOnExit();
         tempPrjFile.deleteOnExit();
 
-        // 바이트 배열을 파일로 저장
         Files.write(tempShpFile.toPath(), command.shp().data(), StandardOpenOption.CREATE);
         Files.write(tempDbfFile.toPath(), command.dbf().data(), StandardOpenOption.CREATE);
         Files.write(tempShxFile.toPath(), command.shx().data(), StandardOpenOption.CREATE);
@@ -143,10 +137,9 @@ public class ShapefileParser {
 
             dataStore.dispose();
             log.info("=== 시/도 데이터 분석 완료 ===");
-
         } catch (Exception e) {
             log.error("시/도 Shapefile 파싱 오류: {}", e.getMessage(), e);
-            throw new RuntimeException("시/도 Shapefile 파싱 실패", e);
+            throw new IllegalArgumentException("시/도 Shapefile 파싱 실패", e);
         }
     }
 }

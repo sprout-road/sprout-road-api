@@ -3,6 +3,7 @@ package com.strout.api.gis.ui.web;
 import com.strout.api.gis.application.GisUploadService;
 import com.strout.api.gis.application.command.ShapefileUploadCommand;
 import com.strout.api.gis.application.command.dto.ShapefileDto;
+import com.strout.api.gis.domain.ShapefileType;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -16,7 +17,6 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.geotools.api.data.SimpleFeatureSource;
-import org.geotools.api.feature.Property;
 import org.geotools.api.feature.simple.SimpleFeature;
 import org.geotools.api.feature.simple.SimpleFeatureType;
 import org.geotools.api.feature.type.AttributeDescriptor;
@@ -59,7 +59,7 @@ public class GisController {
         Model model
     ) {
         ShapefileUploadCommand command = getShapefileUploadCommand(shpFile, dbfFile, shxFile, prjFile);
-        gisUploadService.uploadSidoShapefile(command);
+        gisUploadService.uploadSidoShapefile(command, ShapefileType.SIDO);
 
         model.addAttribute("message", "시/도 데이터 업로드가 완료되었습니다! (17개 광역시도)");
         model.addAttribute("success", true);

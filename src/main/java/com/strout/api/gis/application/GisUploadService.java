@@ -2,7 +2,8 @@ package com.strout.api.gis.application;
 
 import com.strout.api.gis.application.command.ShapefileUploadCommand;
 import com.strout.api.gis.application.command.dto.ShapefileDto;
-import com.strout.api.gis.infrastructure.geotools.ShapefileParser;
+import com.strout.api.gis.domain.ShapefileType;
+import com.strout.api.gis.util.ShapefileParser;
 import com.strout.api.gis.util.ShapefileValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,7 @@ public class GisUploadService {
     /**
      * 시/도 Shapefile 업로드 처리
      */
-    public void uploadSidoShapefile(ShapefileUploadCommand command) {
+    public void uploadSidoShapefile(ShapefileUploadCommand command, ShapefileType type) {
         log.info("=== 시/도 Shapefile 업로드 시작 ===");
 
         // 파일 검증
@@ -32,7 +33,7 @@ public class GisUploadService {
         logFileInfo(command.prj(), "시/도 PRJ");
 
         // Shapefile 파싱 (Infrastructure에 위임)
-        shapefileParser.parseSidoShapefile(command);
+        shapefileParser.parse(command, type);
 
         log.info("=== 시/도 Shapefile 업로드 완료 ===");
     }
