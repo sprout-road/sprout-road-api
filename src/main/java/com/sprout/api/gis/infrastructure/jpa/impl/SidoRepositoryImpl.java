@@ -26,4 +26,10 @@ public class SidoRepositoryImpl implements SidoRepository {
     public String findAllAsGeoJson() {
         return jpaRepository.findAllAsGeoJson();
     }
+
+    @Override
+    public String findSidoNameBySidoCode(String sidoCode) {
+        return jpaRepository.findSidoNameBySidoCode(sidoCode)
+            .orElseThrow(IllegalArgumentException::new);
+    }
 }

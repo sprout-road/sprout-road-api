@@ -42,7 +42,7 @@ public class Sigungu extends TimeBaseEntity {
     @Column(length = 50)
     private String sigNameEn;
 
-    @Column(columnDefinition = "geometry(MultiPolygon)")
+    @Column(columnDefinition = "geometry(MultiPolygon, 4326)")
     private MultiPolygon geometry;
 
     public static Sigungu create(String sigCode, String sigNameKo, String sigNameEn, MultiPolygon geometry) {

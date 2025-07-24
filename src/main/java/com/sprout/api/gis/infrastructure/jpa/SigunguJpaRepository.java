@@ -1,6 +1,8 @@
 package com.sprout.api.gis.infrastructure.jpa;
 
 import com.sprout.api.gis.domain.Sigungu;
+import com.sprout.api.gis.domain.dto.SigunguLocationInfo;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -52,4 +54,18 @@ public interface SigunguJpaRepository extends JpaRepository<Sigungu, Long> {
         )::text
         """, nativeQuery = true)
     String findBySidoCodeAsGeoJson(String sidoCode);
+
+
+    @Query(value = """
+        SELECT
+            sig_code as sigCode,
+            sig_name_ko as sigNameKo,
+            sido_code as sidoCode,
+            ST_Y(ST_Centroid(geometry)) as centerLat,
+            ST_X(ST_Centroid(geometry)) as centerLng
+        FROM sigungu
+        WHERE ST_Contains(geometry, ST_SetSRID(ST_Point(:lng, :lat), 4326))
+        LIMIT 1
+        """, nativeQuery = true)
+    Optional<SigunguLocationInfo> findByContainsPoint(double lng, double lat);
 }
