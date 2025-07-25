@@ -35,7 +35,7 @@ public class Sido extends TimeBaseEntity {
     @Column(length = 50)
     private String sidoNameEn;
 
-    @Column(columnDefinition = "geometry(MultiPolygon)")
+    @Column(columnDefinition = "geometry(MultiPolygon, 4326)")
     private MultiPolygon geometry;
 
     public static Sido create(String sidoCode, String sidoNameKo, String sidoNameEn, MultiPolygon geometry) {

@@ -1,6 +1,7 @@
 package com.sprout.api.gis.infrastructure.jpa;
 
 import com.sprout.api.gis.domain.Sido;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -27,4 +28,7 @@ public interface SidoJpaRepository extends JpaRepository<Sido, Long> {
         )::text
         """, nativeQuery = true)
     String findAllAsGeoJson();
+
+    @Query("SELECT s.sidoNameKo FROM Sido s WHERE s.sidoCode = :sidoCode")
+    Optional<String> findSidoNameBySidoCode(String sidoCode);
 }
