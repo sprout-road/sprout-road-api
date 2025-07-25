@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 @RequestMapping("/admin")
 @RequiredArgsConstructor
-public class adminController {
+public class AdminController {
 
     private final SidoGisService sidoGisService;
     private final SigunguGisService sigunguGisService;
