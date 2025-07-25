@@ -1,9 +1,9 @@
-package com.strout.api.gis.ui.web;
+package com.strout.api.admin;
 
-import com.strout.api.gis.application.GisUploadService;
+import com.strout.api.gis.application.SidoGisService;
+import com.strout.api.gis.application.SigunguGisService;
 import com.strout.api.gis.application.command.ShapefileUploadCommand;
 import com.strout.api.gis.application.command.dto.ShapefileDto;
-import com.strout.api.gis.domain.ShapefileType;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,13 +19,19 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 @RequestMapping("/admin")
 @RequiredArgsConstructor
-public class GisController {
+public class adminController {
 
-    private final GisUploadService gisUploadService;
+    private final SidoGisService sidoGisService;
+    private final SigunguGisService sigunguGisService;
 
     @GetMapping("/upload")
     public String uploadPage() {
         return "admin/upload";
+    }
+
+    @GetMapping("/map-test")
+    public String getTestPage() {
+        return "admin/map-test";
     }
 
     @PostMapping("/upload/shapefile/sido")
@@ -37,7 +43,7 @@ public class GisController {
         Model model
     ) {
         ShapefileUploadCommand command = getShapefileUploadCommand(shpFile, dbfFile, shxFile, prjFile);
-        gisUploadService.uploadSidoShapefile(command, ShapefileType.SIDO);
+        sidoGisService.uploadSidoShapefile(command);
 
         model.addAttribute("message", "시/도 데이터 업로드가 완료되었습니다! (17개 광역시도)");
         model.addAttribute("success", true);
@@ -54,7 +60,8 @@ public class GisController {
         Model model
     ) {
         ShapefileUploadCommand command = getShapefileUploadCommand(shpFile, dbfFile, shxFile, prjFile);
-        gisUploadService.uploadSidoShapefile(command, ShapefileType.SIGUNGU);
+        sigunguGisService.uploadSigunguShapefile(command);
+
         model.addAttribute("message", "시/군/구 데이터 업로드가 완료되었습니다! (252개 시군구)");
         model.addAttribute("success", true);
 
