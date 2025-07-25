@@ -8,7 +8,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.geotools.api.feature.simple.SimpleFeature;
-import org.geotools.api.feature.simple.SimpleFeatureType;
 import org.geotools.data.shapefile.ShapefileDataStore;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureIterator;
@@ -42,14 +41,10 @@ public class SigunguParser {
 
         try {
             ShapefileDataStore dataStore = parsingSupport.createDataStore(shpFile);
-            SimpleFeatureType schema = dataStore.getFeatureSource().getSchema();
             SimpleFeatureCollection features = dataStore.getFeatureSource().getFeatures();
 
-            // 기본 스키마 정보 로깅
-            parsingSupport.logBasicSchemaInfo(schema, features, "시/군/구");
 
             try (SimpleFeatureIterator iterator = features.features()) {
-                int count = 0;
                 while (iterator.hasNext()) {
                     SimpleFeature feature = iterator.next();
 
@@ -65,13 +60,6 @@ public class SigunguParser {
                         // Entity 생성
                         Sigungu sigungu = Sigungu.create(sigCode, sigKorName, sigEngName, wgs84Geom);
                         results.add(sigungu);
-
-                        // 처음 5개만 상세 로깅
-                        if (count < 5) {
-                            log.debug("시/군/구 파싱: {} ({}) - 좌표점 {}",
-                                sigKorName, sigCode, originalGeom.getNumPoints());
-                        }
-                        count++;
                     }
                 }
             }
@@ -79,7 +67,6 @@ public class SigunguParser {
             dataStore.dispose();
             log.info("시/군/구 파싱 완료: {}개", results.size());
             return results;
-
         } catch (Exception e) {
             log.error("시/군/구 Shapefile 파싱 오류: {}", e.getMessage(), e);
             throw new RuntimeException("시/군/구 Shapefile 파싱 실패", e);

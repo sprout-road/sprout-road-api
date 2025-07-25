@@ -6,6 +6,7 @@ import org.geotools.api.referencing.operation.MathTransform;
 import org.geotools.geometry.jts.JTS;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.MultiPolygon;
+import org.locationtech.jts.geom.Polygon;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -32,7 +33,7 @@ public class CoordinateConverter {
                 log.warn("변환된 기하정보가 MultiPolygon이 아님: {}", transformed.getGeometryType());
                 // Polygon을 MultiPolygon으로 변환
                 return originalGeometry.getFactory().createMultiPolygon(
-                    new org.locationtech.jts.geom.Polygon[]{(org.locationtech.jts.geom.Polygon) transformed}
+                    new Polygon[]{(Polygon) transformed}
                 );
             }
 
