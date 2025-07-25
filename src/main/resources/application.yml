@@ -10,4 +10,4 @@ spring:
 
 logging:
   level:
-    com.strout.api: DEBUG
+    com.sprout.api: DEBUG
