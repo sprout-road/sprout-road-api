@@ -1,6 +1,5 @@
-package com.sprout.api.config.gis;
+package com.sprout.api.gis.infrastructure.geotools.config;
 
-import java.util.Map;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -9,7 +8,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class GisConfigProperties {
 
     private Coordinate coordinate;
-    private Map<String, String> systemProperties;
 
     @Data
     public static class Coordinate {
