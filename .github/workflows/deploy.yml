@@ -1,0 +1,105 @@
+name: EC2 배포
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: JDK 21 설정
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Gradle 패키지 캐시
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: gradlew 실행 권한 부여
+        run: chmod +x gradlew
+
+      - name: 환경변수 파일 생성
+        run: |
+          cat > .env << 'EOF'
+          ${{ secrets.ENV_FILE }}
+          EOF
+
+      - name: Gradle 빌드
+        run: ./gradlew build -x test
+
+      - name: JAR 파일명 추출
+        id: jar-name
+        run: |
+          JAR_FILE=$(find build/libs -name "*.jar" -not -name "*-plain.jar" | head -1)
+          echo "jar_file=${JAR_FILE}" >> $GITHUB_OUTPUT
+          echo "jar_name=$(basename ${JAR_FILE})" >> $GITHUB_OUTPUT
+
+      - name: JAR 파일 EC2로 복사
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          source: ${{ steps.jar-name.outputs.jar_file }}
+          target: /home/ubuntu/
+          strip_components: 2
+
+      - name: ENV EC2로 전달
+        uses: appleboy/ssh-action@v0.1.11
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          source: ".env"
+          target: "~/"
+
+      - name: 배포 스크립트 EC2로 전달
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script: |
+            # deploy.sh 스크립트 생성
+            cat > /home/ubuntu/deploy.sh << 'EOF'
+            ${{ secrets.DEPLOY_SCRIPT }}
+            EOF
+
+      - name: ENV EC2로 전달
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+
+      - name: EC2 배포 실행
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script: |
+            # 배포 스크립트 실행 권한 부여 및 실행
+            sudo chmod +x /home/ubuntu/deploy.sh
+            /home/ubuntu/deploy.sh
+            
+            # 보안을 위해 민감한 파일들 삭제
+            sudo rm -f /home/ubuntu/.env
+            sudo rm -f /home/ubuntu/deploy.sh
+            
+            echo "✅ 배포 완료 및 민감한 파일 정리됨"
