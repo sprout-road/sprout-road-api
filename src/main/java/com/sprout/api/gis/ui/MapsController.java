@@ -22,7 +22,7 @@ public class MapsController {
     private String cdnUri;
 
     @GetMapping("/sido")
-    public ResponseEntity<byte[]> getAllSido() {
+    public ResponseEntity<Void> getAllSido() {
         log.info(" =========> sido ");
         String location = String.format("%s/maps/sido.json", cdnUri);
         return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY)
@@ -31,7 +31,7 @@ public class MapsController {
     }
 
     @GetMapping("/sigungu/{sidoCode}")
-    public ResponseEntity<byte[]> getSigunguBySidoCode(@PathVariable @Pattern(regexp = "\\d{2}") String sidoCode) {
+    public ResponseEntity<Void> getSigunguBySidoCode(@PathVariable @Pattern(regexp = "\\d{2}") String sidoCode) {
         String location = String.format("%s/maps/sigungu_%s.json", cdnUri, sidoCode);
         return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY)
             .header(HttpHeaders.LOCATION, location)

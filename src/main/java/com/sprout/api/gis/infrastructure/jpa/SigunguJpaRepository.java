@@ -42,9 +42,11 @@ public interface SigunguJpaRepository extends JpaRepository<Sigungu, Long> {
                             'sidoCode', sido_code,
                             'sigCode', sig_code,
                             'sigNameKo', sig_name_ko,
-                            'sigNameEn', sig_name_en
+                            'sigNameEn', sig_name_en,
+                            'centerLat', ST_Y(ST_Centroid(geometry)),
+                            'centerLng', ST_X(ST_Centroid(geometry))
                         ),
-                        'geometry', ST_AsGeoJSON(geometry)::json
+                        'geometry', ST_AsGeoJSON(ST_Simplify(geometry, 0.005))::json
                     ) ORDER BY sig_code
                 )
                 FROM sigungu

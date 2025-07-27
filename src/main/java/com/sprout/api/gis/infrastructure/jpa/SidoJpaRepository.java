@@ -17,7 +17,9 @@ public interface SidoJpaRepository extends JpaRepository<Sido, Long> {
                         'properties', json_build_object(
                             'sidoCode', sido_code,
                             'sidoNameKo', sido_name_ko,
-                            'sidoNameEn', sido_name_en
+                            'sidoNameEn', sido_name_en,
+                            'centerLat', ST_Y(ST_Centroid(geometry)),
+                            'centerLng', ST_X(ST_Centroid(geometry))
                         ),
                         'geometry', ST_AsGeoJSON(ST_Simplify(geometry, 0.005))::json
                     ) ORDER BY sido_code
