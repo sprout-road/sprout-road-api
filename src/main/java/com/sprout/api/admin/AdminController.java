@@ -10,6 +10,7 @@ import com.sprout.api.gis.infrastructure.jpa.SidoJpaRepository;
 import com.sprout.api.gis.infrastructure.jpa.SigunguJpaRepository;
 import jakarta.validation.constraints.Pattern;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 @RequestMapping("/admin")
 @RequiredArgsConstructor
+@Validated
 public class AdminController {
 
     private final SidoGisService sidoGisService;
@@ -103,32 +106,32 @@ public class AdminController {
     public ResponseEntity<byte[]> getAllSido() {
         log.info(" =========> sido ");
         String json = sidoRepository.findAllAsGeoJson();
-        byte[] bytes = json.getBytes();
-        return ResponseEntity.ok()
-            .contentType(MediaType.APPLICATION_JSON)
-            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"sido.json\"")
-            .body(bytes);
+        return createJsonDownloadResponse(json, "sido.json");
     }
 
     @ResponseBody
     @GetMapping("/sigungu/{sidoCode}")
     public ResponseEntity<byte[]> getSigunguBySidoCode(@PathVariable @Pattern(regexp = "\\d{2}") String sidoCode) {
         String json = sigunguRepository.findBySidoCodeAsGeoJson(sidoCode);
-        byte[] bytes = json.getBytes();
-        return ResponseEntity.ok()
-            .contentType(MediaType.APPLICATION_JSON)
-            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"sigungu_" + sidoCode + ".json\"")
-            .body(bytes);
+        return createJsonDownloadResponse(json, "sigungu_\" + sidoCode + \".json");
     }
 
     @ResponseBody
     @GetMapping("/sido/{sidoCode}/boundaries")
     public ResponseEntity<byte[]> getSidoBoundaries(@PathVariable @Pattern(regexp = "\\d{2}") String sidoCode) {
         String json = sidoRepository.findSidoBoundaries(sidoCode);
-        byte[] bytes = json.getBytes();
+        return createJsonDownloadResponse(json, "sido_boundary_\" + sidoCode + \".json");
+    }
+
+    private ResponseEntity<byte[]> createJsonDownloadResponse(String json, String filename) {
+        if (json == null || json.trim().isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        byte[] bytes = json.getBytes(StandardCharsets.UTF_8);
         return ResponseEntity.ok()
             .contentType(MediaType.APPLICATION_JSON)
-            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"sido_boundary_" + sidoCode + ".json\"")
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
             .body(bytes);
     }
 }
