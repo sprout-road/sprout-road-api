@@ -59,15 +59,6 @@ jobs:
           target: /home/ubuntu/
           strip_components: 2
 
-      - name: ENV EC2로 전달
-        uses: appleboy/ssh-action@v0.1.11
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ubuntu
-          key: ${{ secrets.EC2_PRIVATE_KEY }}
-          source: ".env"
-          target: "~/"
-
       - name: 배포 스크립트 EC2로 전달
         uses: appleboy/ssh-action@v0.1.10
         with:
@@ -86,6 +77,8 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_PRIVATE_KEY }}
+          source: ".env"
+          target: "/home/ubuntu/"
 
       - name: EC2 배포 실행
         uses: appleboy/ssh-action@v0.1.10
