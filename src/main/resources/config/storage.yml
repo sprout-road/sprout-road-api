@@ -1,0 +1,4 @@
+app:
+  storage:
+    cdn:
+      uri: ${CDN_URI}

@@ -37,3 +37,6 @@ out/
 .vscode/
 
 .env
+package-lock.json
+package.json
+application-docker.yml

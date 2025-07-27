@@ -7,7 +7,17 @@ spring:
       - classpath:/config/web.yml
       - classpath:/config/db.yml
       - classpath:/config/gis.yml
+      - classpath:/config/monitoring.yml
+      - classpath:/config/storage.yml
+
+server:
+  tomcat:
+    threads:
+      max: 15
+      min-spare: 3
+    accept-count: 50
+    connection-timeout: 20000
 
 logging:
   level:
-    com.sprout.api: DEBUG
+    com.sprout.api: INFO
