@@ -32,4 +32,9 @@ public class SidoRepositoryImpl implements SidoRepository {
         return jpaRepository.findSidoNameBySidoCode(sidoCode)
             .orElseThrow(IllegalArgumentException::new);
     }
+
+    @Override
+    public String findSidoBoundaries(String sidoCode) {
+        return jpaRepository.findSidoBoundaries(sidoCode);
+    }
 }

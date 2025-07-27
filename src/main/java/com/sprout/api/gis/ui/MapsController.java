@@ -37,4 +37,12 @@ public class MapsController {
             .header(HttpHeaders.LOCATION, location)
             .build();
     }
+
+    @GetMapping("/sido/{sidoCode}/boundaries")
+    public ResponseEntity<Void> getSigunguBoundaries(@PathVariable @Pattern(regexp = "\\d{2}") String sidoCode) {
+        String location = String.format("%s/maps/sido_boundary_%s.json", cdnUri, sidoCode);
+        return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY)
+            .header(HttpHeaders.LOCATION, location)
+            .build();
+    }
 }

@@ -46,7 +46,7 @@ public interface SigunguJpaRepository extends JpaRepository<Sigungu, Long> {
                             'centerLat', ST_Y(ST_Centroid(geometry)),
                             'centerLng', ST_X(ST_Centroid(geometry))
                         ),
-                        'geometry', ST_AsGeoJSON(ST_Simplify(geometry, 0.005))::json
+                        'geometry', ST_AsGeoJSON(geometry)::json
                     ) ORDER BY sig_code
                 )
                 FROM sigungu
@@ -70,4 +70,5 @@ public interface SigunguJpaRepository extends JpaRepository<Sigungu, Long> {
         LIMIT 1
         """, nativeQuery = true)
     Optional<SigunguLocationInfo> findByContainsPoint(double lng, double lat);
+
 }
