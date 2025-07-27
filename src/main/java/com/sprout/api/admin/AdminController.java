@@ -4,25 +4,40 @@ import com.sprout.api.gis.application.SidoGisService;
 import com.sprout.api.gis.application.SigunguGisService;
 import com.sprout.api.gis.application.command.ShapefileUploadCommand;
 import com.sprout.api.gis.application.command.dto.ShapefileDto;
+import com.sprout.api.gis.domain.SidoRepository;
+import com.sprout.api.gis.domain.SigunguRepository;
+import com.sprout.api.gis.infrastructure.jpa.SidoJpaRepository;
+import com.sprout.api.gis.infrastructure.jpa.SigunguJpaRepository;
+import jakarta.validation.constraints.Pattern;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @Controller
 @RequestMapping("/admin")
 @RequiredArgsConstructor
+@Validated
 public class AdminController {
 
     private final SidoGisService sidoGisService;
     private final SigunguGisService sigunguGisService;
+    private final SidoRepository sidoRepository;
+    private final SigunguRepository sigunguRepository;
 
     @GetMapping("/upload")
     public String uploadPage() {
@@ -84,5 +99,39 @@ public class AdminController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @ResponseBody
+    @GetMapping("/sido")
+    public ResponseEntity<byte[]> getAllSido() {
+        log.info(" =========> sido ");
+        String json = sidoRepository.findAllAsGeoJson();
+        return createJsonDownloadResponse(json, "sido.json");
+    }
+
+    @ResponseBody
+    @GetMapping("/sigungu/{sidoCode}")
+    public ResponseEntity<byte[]> getSigunguBySidoCode(@PathVariable @Pattern(regexp = "\\d{2}") String sidoCode) {
+        String json = sigunguRepository.findBySidoCodeAsGeoJson(sidoCode);
+        return createJsonDownloadResponse(json, "sigungu_\" + sidoCode + \".json");
+    }
+
+    @ResponseBody
+    @GetMapping("/sido/{sidoCode}/boundaries")
+    public ResponseEntity<byte[]> getSidoBoundaries(@PathVariable @Pattern(regexp = "\\d{2}") String sidoCode) {
+        String json = sidoRepository.findSidoBoundaries(sidoCode);
+        return createJsonDownloadResponse(json, "sido_boundary_\" + sidoCode + \".json");
+    }
+
+    private ResponseEntity<byte[]> createJsonDownloadResponse(String json, String filename) {
+        if (json == null || json.trim().isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        byte[] bytes = json.getBytes(StandardCharsets.UTF_8);
+        return ResponseEntity.ok()
+            .contentType(MediaType.APPLICATION_JSON)
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
+            .body(bytes);
     }
 }

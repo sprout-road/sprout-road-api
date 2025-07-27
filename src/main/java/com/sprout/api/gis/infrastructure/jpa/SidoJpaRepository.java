@@ -17,7 +17,9 @@ public interface SidoJpaRepository extends JpaRepository<Sido, Long> {
                         'properties', json_build_object(
                             'sidoCode', sido_code,
                             'sidoNameKo', sido_name_ko,
-                            'sidoNameEn', sido_name_en
+                            'sidoNameEn', sido_name_en,
+                            'centerLat', ST_Y(ST_Centroid(geometry)),
+                            'centerLng', ST_X(ST_Centroid(geometry))
                         ),
                         'geometry', ST_AsGeoJSON(ST_Simplify(geometry, 0.005))::json
                     ) ORDER BY sido_code
@@ -31,4 +33,29 @@ public interface SidoJpaRepository extends JpaRepository<Sido, Long> {
 
     @Query("SELECT s.sidoNameKo FROM Sido s WHERE s.sidoCode = :sidoCode")
     Optional<String> findSidoNameBySidoCode(String sidoCode);
+
+    @Query(value = """
+    SELECT json_build_object(
+        'type', 'FeatureCollection',
+        'features', COALESCE(
+            (SELECT json_agg(
+                json_build_object(
+                    'type', 'Feature',
+                    'properties', json_build_object(
+                        'sidoCode', sido_code,
+                        'sidoNameKo', sido_name_ko,
+                        'sidoNameEn', sido_name_en,
+                        'centerLat', ST_Y(ST_Centroid(geometry)),
+                        'centerLng', ST_X(ST_Centroid(geometry))
+                    ),
+                    'geometry', ST_AsGeoJSON(ST_Boundary(ST_Simplify(geometry, 0.005)))::json
+                ) ORDER BY sido_code
+            )
+            FROM sido
+            WHERE sido_code = :sidoCode), 
+            '[]'::json
+        )
+    )::text
+    """, nativeQuery = true)
+    String findSidoBoundaries(String sidoCode);
 }

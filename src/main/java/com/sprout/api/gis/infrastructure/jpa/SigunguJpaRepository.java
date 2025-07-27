@@ -42,7 +42,9 @@ public interface SigunguJpaRepository extends JpaRepository<Sigungu, Long> {
                             'sidoCode', sido_code,
                             'sigCode', sig_code,
                             'sigNameKo', sig_name_ko,
-                            'sigNameEn', sig_name_en
+                            'sigNameEn', sig_name_en,
+                            'centerLat', ST_Y(ST_Centroid(geometry)),
+                            'centerLng', ST_X(ST_Centroid(geometry))
                         ),
                         'geometry', ST_AsGeoJSON(geometry)::json
                     ) ORDER BY sig_code
@@ -68,4 +70,5 @@ public interface SigunguJpaRepository extends JpaRepository<Sigungu, Long> {
         LIMIT 1
         """, nativeQuery = true)
     Optional<SigunguLocationInfo> findByContainsPoint(double lng, double lat);
+
 }

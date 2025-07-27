@@ -40,4 +40,6 @@ public class SigunguRepositoryImpl implements SigunguRepository {
         return sigunguJpaRepository.findByContainsPoint(lng, lat)
             .orElseThrow(IllegalArgumentException::new);
     }
+
+
 }
