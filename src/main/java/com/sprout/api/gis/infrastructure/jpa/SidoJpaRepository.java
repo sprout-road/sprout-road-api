@@ -19,7 +19,7 @@ public interface SidoJpaRepository extends JpaRepository<Sido, Long> {
                             'sidoNameKo', sido_name_ko,
                             'sidoNameEn', sido_name_en
                         ),
-                        'geometry', ST_AsGeoJSON(geometry)::json
+                        'geometry', ST_AsGeoJSON(ST_Simplify(geometry, 0.005))::json
                     ) ORDER BY sido_code
                 )
                 FROM sido), 
