@@ -5,7 +5,6 @@ import com.sprout.api.gis.domain.SigunguRepository;
 import com.sprout.api.gis.domain.dto.SigunguLocationInfo;
 import com.sprout.api.gis.infrastructure.jpa.SigunguJpaRepository;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -32,7 +31,7 @@ public class SigunguRepositoryImpl implements SigunguRepository {
 
     @Override
     public String findBySidoCodeAsGeoJson(String sidoCode) {
-        return sigunguJpaRepository.findBySidoCodeAsGeoJson(sidoCode);
+        return sigunguJpaRepository.findBySidoCodeAsGeoJsonUnified(sidoCode);
     }
 
     @Override

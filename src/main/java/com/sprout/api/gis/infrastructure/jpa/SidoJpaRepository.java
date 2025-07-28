@@ -48,7 +48,7 @@ public interface SidoJpaRepository extends JpaRepository<Sido, Long> {
                         'centerLat', ST_Y(ST_Centroid(geometry)),
                         'centerLng', ST_X(ST_Centroid(geometry))
                     ),
-                    'geometry', ST_AsGeoJSON(ST_Boundary(ST_Simplify(geometry, 0.005)))::json
+                    'geometry', ST_AsGeoJSON(ST_Boundary(geometry))::json
                 ) ORDER BY sido_code
             )
             FROM sido
