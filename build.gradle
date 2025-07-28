@@ -48,6 +48,8 @@ dependencies {
     // Database
     implementation 'org.postgresql:postgresql'
     implementation 'org.hibernate:hibernate-spatial:6.2.13.Final'
+    // JSON 처리를 위한 hibernate-types
+    implementation 'io.hypersistence:hypersistence-utils-hibernate-63:3.10.3'
 
     // lombok
     compileOnly 'org.projectlombok:lombok'

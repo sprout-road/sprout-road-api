@@ -1,3 +1,12 @@
 package com.sprout.api.travel.domain.vo;
 
-public record TextContent(String text) implements ContentValue {}
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+public class TextContent implements ContentValue {
+    private String text;
+}

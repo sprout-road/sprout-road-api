@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class TravelLogService {
 
-    public void writeTravelLog(CreateTravelLogCommand command) {
+    public void writeTravelLog(CreateTravelLogCommand command, Long userId) {
         // todo: 생성 로직
     }
 }

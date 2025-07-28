@@ -15,6 +15,6 @@ public record TravelLogRequest(
 
     public CreateTravelLogCommand toCommand(Long userId) {
         List<ContentBlockCommand> contentBlockCommands = contents.stream().map(ContentBlock::toCommand).toList();
-        return new CreateTravelLogCommand(title, sigunguCode, traveledAt, contentBlockCommands, userId);
+        return new CreateTravelLogCommand(userId, title, sigunguCode, traveledAt, contentBlockCommands);
     }
 }
