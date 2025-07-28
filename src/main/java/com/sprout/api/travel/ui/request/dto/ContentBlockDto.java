@@ -7,7 +7,6 @@ import com.sprout.api.travel.domain.vo.TextContent;
 import java.util.Map;
 
 public record ContentBlockDto(
-    String id,
     String type,
     Integer order,
     Map<String, String> content
@@ -17,9 +16,9 @@ public record ContentBlockDto(
         ContentType contentType = ContentType.fromValue(type);
         if (contentType == ContentType.IMAGE) {
             ImageContent imageContent = new ImageContent(content().get("url"), content.get("caption"));
-            return new ContentBlockCommand(id, contentType, order, imageContent);
+            return new ContentBlockCommand(contentType, order, imageContent);
         }
         TextContent textContent = new TextContent(content().get("text"));
-        return new ContentBlockCommand(id, contentType, order, textContent);
+        return new ContentBlockCommand(contentType, order, textContent);
     }
 }

@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -32,6 +33,7 @@ public class TravelLog extends TimeBaseEntity {
     private String title;
     private LocalDateTime traveledAt;
 
+    @Builder.Default
     @OneToMany(mappedBy = "travelLog", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ContentBlock> contentBlocks = new ArrayList<>();
 
@@ -51,6 +53,7 @@ public class TravelLog extends TimeBaseEntity {
     }
 
     public void addContentBlocks(List<ContentBlock> blocks) {
+        System.out.println(blocks.size() +"-----------------------");
         this.contentBlocks.addAll(blocks);
         blocks.forEach(block -> block.setTravelLog(this));
     }

@@ -29,10 +29,10 @@ public class TravelLogController {
     private final TravelLogQueryService travelLogQueryService;
 
     @GetMapping
-    public ResponseEntity<List<RegionLogResult>> getAllMyTravelLogs(@RequestParam String sidoCode) {
+    public ResponseEntity<List<RegionLogResult>> getAllMyTravelLogs(@RequestParam String sigunguCode) {
         // 임시 사용자 정보로만 진행 -> 인증 및 사용자 컨텍스트는 제일 마지막
         Long userId = 1L;
-        List<RegionLogResult> result = travelLogQueryService.getTravelLogsByRegion(sidoCode, userId);
+        List<RegionLogResult> result = travelLogQueryService.getTravelLogsByRegion(sigunguCode, userId);
         return ResponseEntity.ok(result);
     }
 

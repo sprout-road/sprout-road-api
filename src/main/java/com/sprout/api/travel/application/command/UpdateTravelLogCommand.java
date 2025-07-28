@@ -12,12 +12,7 @@ public record UpdateTravelLogCommand(
 
     public List<ContentBlock> toContentBlocks() {
         return contents.stream()
-            .map(contentCommand -> ContentBlock.of(
-                contentCommand.id(),
-                contentCommand.type(),
-                contentCommand.order(),
-                contentCommand.content()
-            ))
+            .map(contentCommand -> ContentBlock.of(contentCommand.order(), contentCommand.content()))
             .toList();
     }
 }
