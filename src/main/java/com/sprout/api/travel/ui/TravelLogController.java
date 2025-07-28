@@ -1,5 +1,7 @@
 package com.sprout.api.travel.ui;
 
+import com.sprout.api.travel.application.TravelLogService;
+import com.sprout.api.travel.application.command.CreateTravelLogCommand;
 import com.sprout.api.travel.ui.request.TravelLogRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api/travel-logs")
 public class TravelLogController {
+
+    private final TravelLogService travelLogService;
 
     @GetMapping
     public ResponseEntity<List<String>> getAllMyTravelLogs(@RequestParam String sidoCode) {
@@ -48,8 +52,10 @@ public class TravelLogController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addMyTravelLog(@RequestBody TravelLogRequest req) {
+    public ResponseEntity<?> writeMyTravelLog(@RequestBody TravelLogRequest req) {
         Long userId = 1L;
+        CreateTravelLogCommand command = req.toCommand(userId);
+        travelLogService.writeTravelLog(command);
         return null;
     }
 }
