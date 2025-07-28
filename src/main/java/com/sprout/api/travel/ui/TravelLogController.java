@@ -3,6 +3,7 @@ package com.sprout.api.travel.ui;
 import com.sprout.api.travel.application.TravelLogQueryService;
 import com.sprout.api.travel.application.TravelLogService;
 import com.sprout.api.travel.application.command.CreateTravelLogCommand;
+import com.sprout.api.travel.application.result.RegionLogResult;
 import com.sprout.api.travel.application.result.TravelDetailResult;
 import com.sprout.api.travel.ui.request.TravelLogRequest;
 import java.util.List;
@@ -25,17 +26,11 @@ public class TravelLogController {
     private final TravelLogQueryService travelLogQueryService;
 
     @GetMapping
-    public ResponseEntity<List<String>> getAllMyTravelLogs(@RequestParam String sidoCode) {
+    public ResponseEntity<List<RegionLogResult>> getAllMyTravelLogs(@RequestParam String sidoCode) {
         // 임시 사용자 정보로만 진행 -> 인증 및 사용자 컨텍스트는 제일 마지막
         Long userId = 1L;
-        /*
-            todo: 전체 여행 일지 가져오기
-             return {
-                "날짜":
-                "제목":
-             }
-         */
-        return ResponseEntity.ok(List.of());
+        List<RegionLogResult> result = travelLogQueryService.getTravelLogsByRegion(sidoCode, userId);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/{logId}")

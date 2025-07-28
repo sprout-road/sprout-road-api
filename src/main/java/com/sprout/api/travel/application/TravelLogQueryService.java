@@ -1,7 +1,7 @@
 package com.sprout.api.travel.application;
 
+import com.sprout.api.travel.application.result.RegionLogResult;
 import com.sprout.api.travel.application.result.TravelDetailResult;
-import com.sprout.api.travel.domain.ContentBlock;
 import com.sprout.api.travel.domain.TravelLog;
 import com.sprout.api.travel.domain.TravelLogRepository;
 import java.util.List;
@@ -22,5 +22,9 @@ public class TravelLogQueryService {
             throw new IllegalArgumentException();
         }
         return TravelDetailResult.of(travelLog);
+    }
+
+    public List<RegionLogResult> getTravelLogsByRegion(String sidoCode, Long userId) {
+        return travelLogRepository.findAllBySigunguCodeAndUserId(sidoCode, userId);
     }
 }
