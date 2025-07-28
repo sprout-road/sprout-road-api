@@ -1,7 +1,6 @@
 package com.sprout.api.travel.domain;
 
 import com.sprout.api.common.entity.TimeBaseEntity;
-import com.sprout.api.travel.application.command.CreateTravelLogCommand;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -37,6 +36,12 @@ public class TravelLog extends TimeBaseEntity {
     private List<ContentBlock> contentBlocks = new ArrayList<>();
 
     public static TravelLog of(Long userId, String sigunguCode, String title, LocalDateTime traveledAt) {
+        if (title == null || title.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+        if (title.length() > 10) {
+            throw new IllegalArgumentException();
+        }
         return TravelLog.builder()
             .userId(userId)
             .sigunguCode(sigunguCode)

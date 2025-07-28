@@ -1,6 +1,7 @@
 package com.sprout.api.travel.application;
 
 import com.sprout.api.travel.application.command.CreateTravelLogCommand;
+import com.sprout.api.travel.application.command.UpdateTravelLogCommand;
 import com.sprout.api.travel.domain.ContentBlock;
 import com.sprout.api.travel.domain.TravelLog;
 import com.sprout.api.travel.domain.TravelLogRepository;
@@ -23,5 +24,13 @@ public class TravelLogService {
 
         TravelLog saved = travelLogRepository.save(travelLog);
         return saved.getId();
+    }
+
+    public void updateTravelLog(UpdateTravelLogCommand command) {
+        travelLogRepository.findById(command.travelLogId())
+            .ifPresentOrElse(travelLog -> {
+                List<ContentBlock> contentBlocks = command.toContentBlocks();
+                travelLog.updateContent(command.title(), contentBlocks);
+            }, IllegalAccessError::new);
     }
 }
