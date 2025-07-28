@@ -1,7 +1,9 @@
 package com.sprout.api.travel.ui;
 
+import com.sprout.api.travel.application.TravelLogQueryService;
 import com.sprout.api.travel.application.TravelLogService;
 import com.sprout.api.travel.application.command.CreateTravelLogCommand;
+import com.sprout.api.travel.application.result.TravelDetailResult;
 import com.sprout.api.travel.ui.request.TravelLogRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TravelLogController {
 
     private final TravelLogService travelLogService;
+    private final TravelLogQueryService travelLogQueryService;
 
     @GetMapping
     public ResponseEntity<List<String>> getAllMyTravelLogs(@RequestParam String sidoCode) {
@@ -36,19 +39,10 @@ public class TravelLogController {
     }
 
     @GetMapping("/{logId}")
-    public ResponseEntity<?> getMyTravelLogs(@PathVariable Long logId) {
-        // 임시 데이터
+    public ResponseEntity<TravelDetailResult> getMyTravelLog(@PathVariable Long logId) {
         Long userId = 1L;
-        /*
-        * todo: 여행일지 상세 정보 가져오기
-        *  return {
-        *       "제목":
-        *       "날씨":
-        *       "내용":
-        *       "날짜":
-        *  }
-        * */
-        return null;
+        TravelDetailResult result = travelLogQueryService.getMyTravelLog(logId, userId);
+        return ResponseEntity.ok(result);
     }
 
     @PostMapping

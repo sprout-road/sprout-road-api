@@ -6,7 +6,7 @@ import com.sprout.api.travel.domain.vo.ImageContent;
 import com.sprout.api.travel.domain.vo.TextContent;
 import java.util.Map;
 
-public record ContentBlock(
+public record ContentBlockDto(
     String id,
     String type,
     Integer order,
