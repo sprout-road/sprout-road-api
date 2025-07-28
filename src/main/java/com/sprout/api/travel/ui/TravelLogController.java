@@ -52,9 +52,10 @@ public class TravelLogController {
     }
 
     @PostMapping
-    public ResponseEntity<?> writeMyTravelLog(@RequestBody CreateTravelLogCommand req) {
+    public ResponseEntity<Long> writeMyTravelLog(@RequestBody TravelLogRequest req) {
         Long userId = 1L;
-        travelLogService.writeTravelLog(req, userId);
-        return null;
+        CreateTravelLogCommand command = req.toCommand(userId);
+        Long result = travelLogService.writeTravelLog(command);
+        return ResponseEntity.ok(result);
     }
 }

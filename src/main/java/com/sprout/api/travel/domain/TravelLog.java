@@ -36,12 +36,12 @@ public class TravelLog extends TimeBaseEntity {
     @OneToMany(mappedBy = "travelLog", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ContentBlock> contentBlocks = new ArrayList<>();
 
-    public static TravelLog of(CreateTravelLogCommand command) {
+    public static TravelLog of(Long userId, String sigunguCode, String title, LocalDateTime traveledAt) {
         return TravelLog.builder()
-            .userId(command.userId())
-            .sigunguCode(command.sigunguCode())
-            .title(command.title())
-            .traveledAt(command.traveledAt())
+            .userId(userId)
+            .sigunguCode(sigunguCode)
+            .title(title)
+            .traveledAt(traveledAt)
             .build();
     }
 
