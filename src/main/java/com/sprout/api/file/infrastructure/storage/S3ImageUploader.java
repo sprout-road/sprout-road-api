@@ -1,6 +1,6 @@
 package com.sprout.api.file.infrastructure.storage;
 
-import com.sprout.api.common.client.dto.ImageMetaData;
+import com.sprout.api.common.client.dto.FileMetaData;
 import com.sprout.api.common.constants.ImagePurpose;
 import com.sprout.api.file.util.IdUtil;
 import com.sprout.api.file.util.TimeUtil;
@@ -27,7 +27,7 @@ public class S3ImageUploader {
 	private final IdUtil idUtil;
 	private final TimeUtil timeUtil;
 
-	public String uploadImage(String imageKey, ImageMetaData metaData) {
+	public String uploadImage(String imageKey, FileMetaData metaData) {
 		try {
 			PutObjectRequest request = generatePutObject(imageKey, metaData.contentType(), metaData.contentSize());
 			s3Client.putObject(request, RequestBody.fromInputStream(metaData.inputStream(), metaData.contentSize()));

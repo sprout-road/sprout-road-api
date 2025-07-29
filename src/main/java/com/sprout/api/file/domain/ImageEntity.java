@@ -24,28 +24,23 @@ public class ImageEntity extends TimeBaseEntity {
 
 	@Enumerated(EnumType.STRING)
 	private ImagePurpose purpose;
-	private Long referenceId;
 
 	@Enumerated(EnumType.STRING)
 	private ImageStatus status;
 
-	protected ImageEntity(String imageKey, Long referenceId, ImagePurpose purpose) {
-		validateBasicConstruction(imageKey, referenceId, purpose);
+	protected ImageEntity(String imageKey, ImagePurpose purpose) {
+		validateBasicConstruction(imageKey, purpose);
 		this.imageKey = imageKey;
-		this.referenceId = referenceId;
 		this.purpose = purpose;
 		this.status = ImageStatus.TEMPORARY;
 	}
 
-	public static ImageEntity create(String imageKey, Long referenceId, ImagePurpose purpose) {
-		return new ImageEntity(imageKey, referenceId, purpose);
+	public static ImageEntity create(String imageKey, ImagePurpose purpose) {
+		return new ImageEntity(imageKey, purpose);
 	}
 
-	private static void validateBasicConstruction(String imageKey, Long referenceId, ImagePurpose purpose) {
+	private static void validateBasicConstruction(String imageKey, ImagePurpose purpose) {
 		if (imageKey == null || imageKey.isBlank()) {
-			throw new IllegalArgumentException();
-		}
-		if (referenceId == null) {
 			throw new IllegalArgumentException();
 		}
 		if (purpose == null) {

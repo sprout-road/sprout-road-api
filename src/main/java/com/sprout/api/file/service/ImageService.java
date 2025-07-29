@@ -1,7 +1,8 @@
 package com.sprout.api.file.service;
 
 import com.sprout.api.common.client.ImageManageClient;
-import com.sprout.api.common.client.dto.ImageMetaData;
+import com.sprout.api.common.client.dto.FileMetaData;
+import com.sprout.api.common.constants.ImagePurpose;
 import com.sprout.api.file.domain.ImageEntity;
 import com.sprout.api.file.infrastructure.jpa.ImageJpaRepository;
 import com.sprout.api.file.infrastructure.storage.S3ImageUploader;
@@ -20,12 +21,12 @@ public class ImageService implements ImageManageClient {
     private final MetaDataHelper metaDataHelper;
     private final ImageJpaRepository imageJpaRepository;
 
-    public String uploadImage(ImageMetaData metaData) {
+    public String uploadImage(FileMetaData metaData, ImagePurpose purpose) {
         String originalFilename = metaData.originalFilename();
         String extension = metaDataHelper.extractExtension(originalFilename);
-        String fileKey = s3ImageUploader.generateFileKey(metaData.purpose(), extension);
+        String fileKey = s3ImageUploader.generateFileKey(purpose, extension);
 
-        ImageEntity imageEntity = ImageEntity.create(fileKey, metaData.referenceId(), metaData.purpose());
+        ImageEntity imageEntity = ImageEntity.create(fileKey, purpose);
         imageJpaRepository.save(imageEntity);
 
         return s3ImageUploader.uploadImage(fileKey, metaData);
