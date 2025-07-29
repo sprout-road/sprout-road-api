@@ -1,0 +1,5 @@
+app:
+  storage:
+    cdn:
+      uri: ${CDN_URI}
+      bucket: ${S3_BUCKET}

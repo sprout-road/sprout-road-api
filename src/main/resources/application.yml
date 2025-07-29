@@ -8,7 +8,7 @@ spring:
       - classpath:/config/db.yml
       - classpath:/config/gis.yml
       - classpath:/config/monitoring.yml
-      - classpath:/config/storage.yml
+      - classpath:/config/aws.yml
 
 server:
   tomcat:

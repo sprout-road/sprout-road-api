@@ -48,6 +48,10 @@ dependencies {
     // Database
     implementation 'org.postgresql:postgresql'
     implementation 'org.hibernate:hibernate-spatial:6.2.13.Final'
+
+    // s3
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3:3.3.0'
+
     // JSON 처리를 위한 hibernate-types
     implementation 'io.hypersistence:hypersistence-utils-hibernate-63:3.10.3'
 

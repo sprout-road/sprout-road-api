@@ -1,4 +1,4 @@
-package com.sprout.api.image;
+package com.sprout.api.file.domain;
 
 import com.sprout.api.common.constants.ImagePurpose;
 import com.sprout.api.common.entity.TimeBaseEntity;
