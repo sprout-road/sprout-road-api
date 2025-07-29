@@ -68,7 +68,7 @@ public class TravelLogController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/images/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> uploadImage(@RequestParam MultipartFile imageFile) {
         FileMetaData imageMetaData = FileMetaData.from(imageFile);
         String imageUrl = imageManageClient.uploadImage(imageMetaData, ImagePurpose.TRAVEL_LOG);

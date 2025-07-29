@@ -54,7 +54,7 @@ public class S3ImageUploader {
 	public String generateFileKey(ImagePurpose purpose, String extension) {
 		return String.format(FILE_KEY_FORMAT,
 			IMAGE_KEY_PREFIX,
-			purpose,
+			purpose.getValue(),
 			idUtil.generateUniqueId(FILE_KEY_SUFFIX_LENGTH).substring(0, 2),
 			timeUtil.getFormattedDate(FILE_DATE_FORMAT),
 			idUtil.generateUniqueId(FILE_KEY_SUFFIX_LENGTH),

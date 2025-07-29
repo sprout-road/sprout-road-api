@@ -1,3 +1,11 @@
+spring:
+  cloud:
+    aws:
+      credentials:
+        access-key: ${S3_ACCESS_KEY}
+        secret-key: ${S3_SECRET_KEY}
+      region:
+        static: ${AWS_STATIC_REGION:ap-northeast-2}
 app:
   storage:
     cdn:
