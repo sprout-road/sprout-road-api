@@ -1,8 +1,9 @@
-package com.sprout.api.file.infra.storage;
+package com.sprout.api.file.infrastructure.storage;
 
+import com.sprout.api.common.client.dto.ImageMetaData;
+import com.sprout.api.common.constants.ImagePurpose;
 import com.sprout.api.file.util.IdUtil;
 import com.sprout.api.file.util.TimeUtil;
-import java.io.InputStream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -26,10 +27,10 @@ public class S3ImageUploader {
 	private final IdUtil idUtil;
 	private final TimeUtil timeUtil;
 
-	public String uploadImage(String imageKey, InputStream inputStream, String contentType, long contentSize) {
+	public String uploadImage(String imageKey, ImageMetaData metaData) {
 		try {
-			PutObjectRequest request = generatePutObjectRequest(imageKey,contentType, contentSize);
-			s3Client.putObject(request, RequestBody.fromInputStream(inputStream, contentSize));
+			PutObjectRequest request = generatePutObject(imageKey, metaData.contentType(), metaData.contentSize());
+			s3Client.putObject(request, RequestBody.fromInputStream(metaData.inputStream(), metaData.contentSize()));
 			return getFullImageUrl(imageKey);
 		} catch (S3Exception e) {
 			log.error("S3 업로드 중 예외 발생: ", e);
@@ -50,7 +51,7 @@ public class S3ImageUploader {
 		return imageUrl.substring(baseUrl.length() + 1);
 	}
 
-	public String generateFileKey(String purpose, String extension) {
+	public String generateFileKey(ImagePurpose purpose, String extension) {
 		return String.format(FILE_KEY_FORMAT,
 			IMAGE_KEY_PREFIX,
 			purpose,
@@ -62,7 +63,7 @@ public class S3ImageUploader {
 		);
 	}
 
-	private PutObjectRequest generatePutObjectRequest(String key, String contentType, long contentLength) {
+	private PutObjectRequest generatePutObject(String key, String contentType, long contentLength) {
 		return PutObjectRequest.builder()
 			.bucket(s3Properties.getBucket())
 			.key(key)

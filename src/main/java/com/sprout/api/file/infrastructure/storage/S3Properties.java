@@ -1,4 +1,4 @@
-package com.sprout.api.file.infra.storage;
+package com.sprout.api.file.infrastructure.storage;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
