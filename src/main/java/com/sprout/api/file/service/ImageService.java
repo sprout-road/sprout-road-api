@@ -9,9 +9,11 @@ import com.sprout.api.file.util.MetaDataHelper;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ImageService implements ImageManageClient {
 
     private final S3ImageUploader s3ImageUploader;
@@ -31,10 +33,18 @@ public class ImageService implements ImageManageClient {
 
     public void markImagesAsUsed(List<String> imageUrls) {
         List<String> imageKeys = convertImageKeys(imageUrls);
+        List<ImageEntity> Images = imageJpaRepository.findAllById(imageKeys);
+        for (ImageEntity imageEntity : Images) {
+            imageEntity.markAsUsed();
+        }
     }
 
     public void markImagesAsUnused(List<String> imageUrls) {
         List<String> imageKeys = convertImageKeys(imageUrls);
+        List<ImageEntity> Images = imageJpaRepository.findAllById(imageKeys);
+        for (ImageEntity imageEntity : Images) {
+            imageEntity.markAsUnused();
+        }
     }
 
     private List<String> convertImageKeys(List<String> imageUrls) {
