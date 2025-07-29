@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.S3Exception;
 
@@ -70,5 +71,18 @@ public class S3ImageUploader {
 			.contentType(contentType)
 			.contentLength(contentLength)
 			.build();
+	}
+
+	public void deleteImage(String imageKey) {
+		try {
+			DeleteObjectRequest deleteRequest = DeleteObjectRequest.builder()
+				.bucket(s3Properties.getBucket())
+				.key(imageKey)
+				.build();
+			s3Client.deleteObject(deleteRequest);
+		} catch (S3Exception e) {
+			log.error("S3 파일 삭제 실패 - key: {}", imageKey, e);
+			throw new IllegalStateException("S3 파일 삭제 실패: " + imageKey, e);
+		}
 	}
 }
