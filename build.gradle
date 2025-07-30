@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.5.3'
+    id 'org.springframework.boot' version '3.4.2'
     id 'io.spring.dependency-management' version '1.1.7'
 }
 
@@ -26,6 +26,12 @@ repositories {
 
     // GeoTools 전용 저장소
     maven { url 'https://repo.osgeo.org/repository/release/' }
+    maven { url 'https://repo.spring.io/milestone' }
+    maven { url 'https://repo.spring.io/snapshot' }
+    maven {
+        name = 'Central Portal Snapshots'
+        url = 'https://central.sonatype.com/repository/maven-snapshots/'
+    }
 }
 
 // GeoTools 버전
@@ -35,7 +41,7 @@ ext {
 
 
 dependencies {
-    // spring
+    // spring boot
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -61,6 +67,9 @@ dependencies {
 
     // swagger
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9'
+
+    // ai
+    implementation 'com.google.genai:google-genai:1.10.0'
 
     // GeoTools (명시적 버전 필요 - Spring Boot BOM에 없음)
     implementation "org.geotools:gt-shapefile:${geoToolsVersion}"

@@ -1,0 +1,4 @@
+google:
+  ai:
+    api-key: ${GOOGLE_AI_API_KEY}
+    model: ${GOOGLE_AI_MODEL:gemini-2.5-flash-lite}
