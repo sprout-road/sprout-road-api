@@ -3,6 +3,7 @@ package com.sprout.api.travel.ui;
 import com.sprout.api.common.client.ImageManageClient;
 import com.sprout.api.common.client.dto.FileMetaData;
 import com.sprout.api.common.constants.ImagePurpose;
+import com.sprout.api.common.utils.FileMetaDataExtractor;
 import com.sprout.api.travel.application.TravelLogQueryService;
 import com.sprout.api.travel.application.TravelLogService;
 import com.sprout.api.travel.application.command.CreateTravelLogCommand;
@@ -32,6 +33,7 @@ public class TravelLogController {
 
     private final TravelLogService travelLogService;
     private final TravelLogQueryService travelLogQueryService;
+    private final FileMetaDataExtractor fileMetaDataExtractor;
     private final ImageManageClient imageManageClient;
 
     @GetMapping
@@ -70,7 +72,7 @@ public class TravelLogController {
 
     @PostMapping(value = "/images/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> uploadImage(@RequestParam MultipartFile imageFile) {
-        FileMetaData imageMetaData = FileMetaData.from(imageFile);
+        FileMetaData imageMetaData = fileMetaDataExtractor.extractFrom(imageFile);
         String imageUrl = imageManageClient.uploadImage(imageMetaData, ImagePurpose.TRAVEL_LOG);
         return ResponseEntity.ok(imageUrl);
     }

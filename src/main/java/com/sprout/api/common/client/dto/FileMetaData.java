@@ -1,27 +1,30 @@
 package com.sprout.api.common.client.dto;
 
-import com.sprout.api.common.constants.ImagePurpose;
-import java.io.IOException;
 import java.io.InputStream;
-import org.springframework.web.multipart.MultipartFile;
+import java.util.function.Supplier;
 
 public record FileMetaData(
-    InputStream inputStream,
+    Supplier<InputStream> inputStreamSupplier,
     String originalFilename,
     String contentType,
     long contentSize
 ) {
 
-    public static FileMetaData from(MultipartFile file) {
-        try {
-            return new FileMetaData(
-                file.getInputStream(),
-                file.getOriginalFilename(),
-                file.getContentType(),
-                file.getSize()
-            );
-        } catch (IOException e) {
-            throw new IllegalArgumentException("파일 처리 중 오류가 발생했습니다.", e);
-        }
+    public static FileMetaData of(
+        Supplier<InputStream> inputStreamSupplier,
+        String originalFilename,
+        String contentType,
+        long contentSize
+    ) {
+        return new FileMetaData(
+            inputStreamSupplier,
+            originalFilename,
+            contentType,
+            contentSize
+        );
+    }
+
+    public InputStream getInputStream() {
+        return inputStreamSupplier.get();
     }
 }

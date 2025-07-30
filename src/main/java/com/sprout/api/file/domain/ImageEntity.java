@@ -2,6 +2,7 @@ package com.sprout.api.file.domain;
 
 import com.sprout.api.common.constants.ImagePurpose;
 import com.sprout.api.common.entity.TimeBaseEntity;
+import com.sprout.api.common.utils.ObjectValidator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -40,17 +41,13 @@ public class ImageEntity extends TimeBaseEntity {
 	}
 
 	private static void validateBasicConstruction(String imageKey, ImagePurpose purpose) {
-		if (imageKey == null || imageKey.isBlank()) {
-			throw new IllegalArgumentException();
-		}
-		if (purpose == null) {
-			throw new IllegalArgumentException();
-		}
+		ObjectValidator.validateNotBlank(imageKey, "Image key cannot be null or empty");
+		ObjectValidator.validateNotNull(purpose, "Image purpose cannot be null");
 	}
 
 	public void markAsUsed() {
 		if (isDeleted()) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("삭제된 이미지의 상태를 변경할 수 없습니다");
 		}
 		this.status = ImageStatus.USED;
 	}

@@ -34,16 +34,16 @@ public class ImageService implements ImageManageClient {
 
     public void markImagesAsUsed(List<String> imageUrls) {
         List<String> imageKeys = convertImageKeys(imageUrls);
-        List<ImageEntity> Images = imageJpaRepository.findAllById(imageKeys);
-        for (ImageEntity imageEntity : Images) {
+        List<ImageEntity> images = imageJpaRepository.findAllById(imageKeys);
+        for (ImageEntity imageEntity : images) {
             imageEntity.markAsUsed();
         }
     }
 
     public void markImagesAsUnused(List<String> imageUrls) {
         List<String> imageKeys = convertImageKeys(imageUrls);
-        List<ImageEntity> Images = imageJpaRepository.findAllById(imageKeys);
-        for (ImageEntity imageEntity : Images) {
+        List<ImageEntity> images = imageJpaRepository.findAllById(imageKeys);
+        for (ImageEntity imageEntity : images) {
             imageEntity.markAsUnused();
         }
     }

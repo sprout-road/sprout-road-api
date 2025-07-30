@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import org.springframework.stereotype.Component;
 
@@ -33,7 +34,8 @@ public class TimeUtil {
 	}
 
 	public String getFormattedDate(String format) {
-		return new SimpleDateFormat(format).format(getDate());
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
+		return now().format(formatter);
 	}
 
 	public LocalDateTime now() {
