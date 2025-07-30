@@ -1,5 +1,6 @@
 package com.sprout.api.admin;
 
+import com.sprout.api.admin.docs.AdminControllerDocs;
 import com.sprout.api.gis.application.SidoGisService;
 import com.sprout.api.gis.application.SigunguGisService;
 import com.sprout.api.gis.application.command.ShapefileUploadCommand;
@@ -32,7 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/admin")
 @RequiredArgsConstructor
 @Validated
-public class AdminController {
+public class AdminController implements AdminControllerDocs {
 
     private final SidoGisService sidoGisService;
     private final SigunguGisService sigunguGisService;
