@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/auth")
 @RestController
 @RequiredArgsConstructor
-public class TempAuthController {
+public class TempAuthController implements AuthControllerDocs {
 
     private final TempAuthService tempAuthService;
 
