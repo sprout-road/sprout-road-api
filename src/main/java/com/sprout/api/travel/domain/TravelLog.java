@@ -53,7 +53,6 @@ public class TravelLog extends TimeBaseEntity {
     }
 
     public void addContentBlocks(List<ContentBlock> blocks) {
-        System.out.println(blocks.size() +"-----------------------");
         this.contentBlocks.addAll(blocks);
         blocks.forEach(block -> block.setTravelLog(this));
     }

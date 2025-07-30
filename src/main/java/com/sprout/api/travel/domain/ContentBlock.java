@@ -1,7 +1,6 @@
 package com.sprout.api.travel.domain;
 
 import com.sprout.api.travel.domain.vo.ContentType;
-import com.sprout.api.travel.domain.vo.ContentValue;
 import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.util.Map;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,12 +41,16 @@ public class ContentBlock {
 
     @Type(JsonType.class)
     @Column(columnDefinition = "jsonb")
-    private ContentValue content;
+    private Map<String, String> content;
 
-    public static ContentBlock of(Integer order, ContentValue content) {
+    @Enumerated(EnumType.STRING)
+    private ContentType contentType;
+
+    public static ContentBlock of(Integer order, Map<String, String> content, ContentType contentType) {
         return ContentBlock.builder()
             .displayOrder(order)
             .content(content)
+            .contentType(contentType)
             .build();
     }
 }

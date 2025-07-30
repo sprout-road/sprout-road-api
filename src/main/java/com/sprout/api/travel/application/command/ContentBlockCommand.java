@@ -1,11 +1,11 @@
 package com.sprout.api.travel.application.command;
 
 import com.sprout.api.travel.domain.vo.ContentType;
-import com.sprout.api.travel.domain.vo.ContentValue;
+import java.util.Map;
 
 public record ContentBlockCommand(
     ContentType type,
     Integer order,
-    ContentValue content
+    Map<String, String> content
 ) {
 }
