@@ -1,14 +1,19 @@
 package com.sprout.api.travel.application.result;
 
 import com.sprout.api.travel.domain.ContentBlock;
-import com.sprout.api.travel.domain.vo.ContentValue;
+import java.util.Map;
 
 public record ContentBlockResult(
-    int order,
-    ContentValue content
+    String type,
+    Integer order,
+    Map<String, String> content
 ) {
 
     public static ContentBlockResult of (ContentBlock contentBlock) {
-        return new ContentBlockResult(contentBlock.getDisplayOrder(), contentBlock.getContent());
+        return new ContentBlockResult(
+            contentBlock.getContentType().getValue(),
+            contentBlock.getDisplayOrder(),
+            contentBlock.getContent()
+        );
     }
 }
