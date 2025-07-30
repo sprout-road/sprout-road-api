@@ -53,4 +53,16 @@ public class ContentBlock {
             .contentType(contentType)
             .build();
     }
+
+    public boolean isImage() {
+        return contentType == ContentType.IMAGE;
+    }
+
+    public String getImageUrl() {
+        String imageUrl = content.get("image_url");
+        if (imageUrl == null) {
+            throw new IllegalStateException("이미지 타입이 아님");
+        }
+        return imageUrl;
+    }
 }
