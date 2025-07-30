@@ -28,6 +28,8 @@ import org.hibernate.annotations.Type;
 @Table(name = "content_blocks")
 public class ContentBlock {
 
+    private static final String IMAGE_URL_KEY = "url";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -59,7 +61,7 @@ public class ContentBlock {
     }
 
     public String getImageUrl() {
-        String imageUrl = content.get("image_url");
+        String imageUrl = content.get(IMAGE_URL_KEY);
         if (imageUrl == null) {
             throw new IllegalStateException("이미지 타입이 아님");
         }
