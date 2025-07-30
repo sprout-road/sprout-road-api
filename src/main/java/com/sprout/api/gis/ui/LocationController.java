@@ -2,6 +2,7 @@ package com.sprout.api.gis.ui;
 
 import com.sprout.api.gis.application.LocationService;
 import com.sprout.api.gis.application.command.dto.LocationHighlightDto;
+import com.sprout.api.gis.ui.docs.LocationControllerDocs;
 import com.sprout.api.gis.ui.dto.LocationRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/gis")
-public class LocationController {
+public class LocationController implements LocationControllerDocs {
     
     private final LocationService locationService;
 
