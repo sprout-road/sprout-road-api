@@ -1,0 +1,3 @@
+app:
+  server:
+    url: ${APP_SERVER_URL:http://localhost:8080}
