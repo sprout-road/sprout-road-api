@@ -8,7 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
@@ -31,13 +31,13 @@ public class TravelLog extends TimeBaseEntity {
     private Long userId;
     private String sigunguCode;
     private String title;
-    private LocalDateTime traveledAt;
+    private LocalDate traveledAt;
 
     @Builder.Default
     @OneToMany(mappedBy = "travelLog", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ContentBlock> contentBlocks = new ArrayList<>();
 
-    public static TravelLog of(Long userId, String sigunguCode, String title, LocalDateTime traveledAt) {
+    public static TravelLog of(Long userId, String sigunguCode, String title, LocalDate traveledAt) {
         if (title == null || title.isEmpty()) {
             throw new IllegalArgumentException();
         }

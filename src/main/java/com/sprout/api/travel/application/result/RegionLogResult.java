@@ -1,10 +1,10 @@
 package com.sprout.api.travel.application.result;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public record RegionLogResult(
     Long id,
-    LocalDateTime traveledAt,
+    LocalDate traveledAt,
     String title
 ) {
 }
