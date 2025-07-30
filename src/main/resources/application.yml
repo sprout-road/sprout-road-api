@@ -9,6 +9,7 @@ spring:
       - classpath:/config/gis.yml
       - classpath:/config/monitoring.yml
       - classpath:/config/aws.yml
+      - classpath:/config/swagger.yml
 
 server:
   tomcat:

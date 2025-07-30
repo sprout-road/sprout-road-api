@@ -10,6 +10,7 @@ import com.sprout.api.travel.application.command.CreateTravelLogCommand;
 import com.sprout.api.travel.application.command.UpdateTravelLogCommand;
 import com.sprout.api.travel.application.result.RegionLogResult;
 import com.sprout.api.travel.application.result.TravelDetailResult;
+import com.sprout.api.travel.ui.docs.TravelLogControllerDocs;
 import com.sprout.api.travel.ui.request.TravelLogCreateRequest;
 import com.sprout.api.travel.ui.request.TravelLogUpdateRequest;
 import java.util.List;
@@ -29,7 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/travel-logs")
-public class TravelLogController {
+public class TravelLogController implements TravelLogControllerDocs {
 
     private final TravelLogService travelLogService;
     private final TravelLogQueryService travelLogQueryService;

@@ -59,6 +59,9 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
+    // swagger
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9'
+
     // GeoTools (명시적 버전 필요 - Spring Boot BOM에 없음)
     implementation "org.geotools:gt-shapefile:${geoToolsVersion}"
     implementation "org.geotools:gt-epsg-hsql:${geoToolsVersion}"

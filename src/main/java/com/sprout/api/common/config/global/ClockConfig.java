@@ -1,4 +1,4 @@
-package com.sprout.api.config.global;
+package com.sprout.api.common.config.global;
 
 import java.time.Clock;
 import java.time.ZoneId;

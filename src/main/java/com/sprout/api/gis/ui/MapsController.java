@@ -1,5 +1,6 @@
 package com.sprout.api.gis.ui;
 
+import com.sprout.api.gis.ui.docs.MapsControllerDocs;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api/gis")
 @Slf4j
-public class MapsController {
+public class MapsController implements MapsControllerDocs {
 
     @Value("${app.storage.cdn.uri}")
     private String cdnUri;
