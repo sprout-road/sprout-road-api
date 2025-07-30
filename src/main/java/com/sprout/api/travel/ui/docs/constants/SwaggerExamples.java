@@ -6,7 +6,7 @@ public class SwaggerExamples {
         {
           "title": "부산 여행",
           "sigunguCode": "26110", 
-          "traveledAt": "2025-07-30T10:00:00",
+          "traveledAt": "2025-07-30",
           "contents": [
             {
               "type": "text",
@@ -30,8 +30,8 @@ public class SwaggerExamples {
     public static final String TRAVEL_LOG_UPDATE_EXAMPLE = """
         {
           "title": "부산 여행",
-          "sigunguCode": "26110", 
-          "traveledAt": "2025-07-30T10:00:00",
+          "sigunguCode": "26110",
+          "traveledAt": "2025-07-30",
           "contents": [
             {
               "type": "image",
@@ -56,7 +56,7 @@ public class SwaggerExamples {
         {
           "id": 1,
           "title": "부산 여행",
-          "traveledAt": "2025-07-30T10:00:00",
+          "traveledAt": "2025-07-30",
           "contents": [
             {
               "type": "text",
