@@ -2,14 +2,14 @@ package com.sprout.api.travel.application.command;
 
 import com.sprout.api.travel.domain.ContentBlock;
 import com.sprout.api.travel.domain.TravelLog;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 public record CreateTravelLogCommand(
     Long userId,
     String title,
     String sigunguCode,
-    LocalDateTime traveledAt,
+    LocalDate traveledAt,
     List<ContentBlockCommand> contents
 ) {
 

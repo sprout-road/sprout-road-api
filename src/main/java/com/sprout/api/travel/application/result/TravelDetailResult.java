@@ -2,13 +2,13 @@ package com.sprout.api.travel.application.result;
 
 import com.sprout.api.travel.domain.ContentBlock;
 import com.sprout.api.travel.domain.TravelLog;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 public record TravelDetailResult(
     Long id,
     String title,
-    LocalDateTime traveledAt,
+    LocalDate traveledAt,
     List<ContentBlockResult> contents
 ) {
 
