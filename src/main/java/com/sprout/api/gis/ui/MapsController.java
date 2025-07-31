@@ -48,4 +48,12 @@ public class MapsController implements MapsControllerDocs {
             .header(HttpHeaders.LOCATION, location)
             .build();
     }
+
+    @GetMapping("/regions/{sidoCode}")
+    public ResponseEntity<Void> getRegionBySidoCode(@PathVariable String sidoCode) {
+        String location = String.format("%s/maps/regions/region_%s.json", cdnUri, sidoCode);
+        return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY)
+            .header(HttpHeaders.LOCATION, location)
+            .build();
+    }
 }
