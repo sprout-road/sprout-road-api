@@ -1,6 +1,8 @@
 package com.sprout.api.mission.infrastructure;
 
 import com.slack.api.Slack;
+import com.slack.api.webhook.Payload;
+import java.io.IOException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -15,8 +17,12 @@ public class SlackTemplate {
         this.webhookUrl = webhookUrl;
     }
 
-    public String send(String payload) {
-        //todo: 알림 처리하기
-        return null;
+    public void send(String text) {
+        Payload payload = Payload.builder().text(text).build();
+        try {
+            slack.send(webhookUrl, payload);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
