@@ -31,9 +31,6 @@ public interface SidoJpaRepository extends JpaRepository<Sido, Long> {
         """, nativeQuery = true)
     String findAllAsGeoJson();
 
-    @Query("SELECT s.sidoNameKo FROM Sido s WHERE s.sidoCode = :sidoCode")
-    Optional<String> findSidoNameBySidoCode(String sidoCode);
-
     @Query(value = """
     SELECT json_build_object(
         'type', 'FeatureCollection',

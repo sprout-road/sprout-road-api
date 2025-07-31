@@ -25,11 +25,6 @@ public class SigunguRepositoryImpl implements SigunguRepository {
     }
 
     @Override
-    public String findAllAsGeoJson() {
-        return sigunguJpaRepository.findAllAsGeoJson();
-    }
-
-    @Override
     public String findBySidoCodeAsGeoJson(String sidoCode) {
         return sigunguJpaRepository.findBySidoCodeAsGeoJsonUnified(sidoCode);
     }

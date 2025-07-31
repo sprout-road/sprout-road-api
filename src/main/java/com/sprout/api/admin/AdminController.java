@@ -112,14 +112,14 @@ public class AdminController implements AdminControllerDocs {
 
     @ResponseBody
     @GetMapping("/sigungu/{sidoCode}")
-    public ResponseEntity<byte[]> getSigunguBySidoCode(@PathVariable @Pattern(regexp = "\\d{2}") String sidoCode) {
+    public ResponseEntity<byte[]> getSigunguBySidoCode(@PathVariable String sidoCode) {
         String json = sigunguRepository.findBySidoCodeAsGeoJson(sidoCode);
         return createJsonDownloadResponse(json, "sigungu_" + sidoCode + ".json");
     }
 
     @ResponseBody
     @GetMapping("/sido/{sidoCode}/boundaries")
-    public ResponseEntity<byte[]> getSidoBoundaries(@PathVariable @Pattern(regexp = "\\d{2}") String sidoCode) {
+    public ResponseEntity<byte[]> getSidoBoundaries(@PathVariable String sidoCode) {
         String json = sidoRepository.findSidoBoundaries(sidoCode);
         return createJsonDownloadResponse(json, "sido_boundary_" + sidoCode + ".json");
     }
