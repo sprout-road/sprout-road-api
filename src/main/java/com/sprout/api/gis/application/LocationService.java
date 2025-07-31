@@ -1,6 +1,8 @@
 package com.sprout.api.gis.application;
 
 import com.sprout.api.gis.application.command.dto.LocationHighlightDto;
+import com.sprout.api.gis.application.result.LocationResult;
+import com.sprout.api.gis.domain.RegionRepository;
 import com.sprout.api.gis.domain.RegionType;
 import com.sprout.api.gis.domain.SigunguRepository;
 import com.sprout.api.gis.domain.dto.SigunguLocationInfo;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 public class LocationService {
 
     private final SigunguRepository sigunguRepository;
+    private final RegionRepository regionRepository;
 
     public LocationHighlightDto findLocationForHighlight(double lat, double lng) {
         validateCoordinates(lat, lng);
@@ -35,5 +38,9 @@ public class LocationService {
         if (lng < 124.0 || lng > 132.0) {
             throw new IllegalArgumentException("유효하지 않은 경도입니다. (124.0 ~ 132.0)");
         }
+    }
+
+    public LocationResult findLocation(Double lat, Double lng) {
+        return regionRepository.findLocation(lat, lng);
     }
 }

@@ -1,5 +1,6 @@
 package com.sprout.api.gis.infrastructure.jpa;
 
+import com.sprout.api.gis.application.result.LocationResult;
 import com.sprout.api.gis.domain.Sigungu;
 import com.sprout.api.gis.domain.dto.SigunguLocationInfo;
 import java.util.Optional;
@@ -126,4 +127,15 @@ public interface SigunguJpaRepository extends JpaRepository<Sigungu, Long> {
         """, nativeQuery = true)
     Optional<SigunguLocationInfo> findByContainsPoint(double lng, double lat);
 
+    @Query(value = """
+        SELECT
+            sig_code as regionCode,
+            sig_name_ko as regionName,
+            ST_Y(ST_Centroid(geometry)) as centerLat,
+            ST_X(ST_Centroid(geometry)) as centerLng
+        FROM sigungu
+        WHERE ST_Contains(geometry, ST_SetSRID(ST_Point(:lng, :lat), 4326))
+        LIMIT 1
+        """, nativeQuery = true)
+    Optional<LocationResult> findCityPoint(double lng, double lat);
 }
