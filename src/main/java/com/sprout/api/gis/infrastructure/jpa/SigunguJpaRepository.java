@@ -1,8 +1,10 @@
 package com.sprout.api.gis.infrastructure.jpa;
 
+import com.sprout.api.common.client.dto.RegionInfoDto;
 import com.sprout.api.gis.application.result.LocationResult;
 import com.sprout.api.gis.domain.Sigungu;
 import com.sprout.api.gis.domain.dto.SigunguLocationInfo;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -138,4 +140,23 @@ public interface SigunguJpaRepository extends JpaRepository<Sigungu, Long> {
         LIMIT 1
         """, nativeQuery = true)
     Optional<LocationResult> findCityPoint(double lng, double lat);
+
+    @Query(value = """
+    SELECT 
+        MIN(sig_code) as regionCode,
+        CASE
+            WHEN sig_name_ko ~ '.+시.+(구|군)'
+            THEN REGEXP_REPLACE(sig_name_ko, '\\s+(.*구|.*군)', '')
+            ELSE sig_name_ko
+        END as regionName
+    FROM sigungu
+    WHERE sido_code NOT IN ('11', '26', '27', '28', '29', '30', '31', '36')
+    GROUP BY
+        CASE
+            WHEN sig_name_ko ~ '.+시.+(구|군)'
+            THEN REGEXP_REPLACE(sig_name_ko, '\\s+(.*구|.*군)', '')
+            ELSE sig_name_ko
+        END
+    """, nativeQuery = true)
+    List<RegionInfoDto> findAllNormalCityNames();
 }

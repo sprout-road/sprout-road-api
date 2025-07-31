@@ -20,19 +20,19 @@ public class SimpleMissionTestController {
 
     @GetMapping("/mission/{regionCode}/{regionName}")
     public ResponseEntity<String> testMissionGeneration(
-            @PathVariable String regionCode,
-            @PathVariable String regionName) {
-        
+        @PathVariable String regionCode,
+        @PathVariable String regionName) {
+
         try {
             String prompt = buildMissionPrompt(regionCode, regionName);
-            
+
             log.info("미션 생성 테스트 시작 - 지역: {} ({})", regionName, regionCode);
             log.info("전송할 프롬프트:\n{}", prompt);
-            
+
             String response = geminiTemplate.generate(prompt);
-            
+
             log.info("AI 응답 결과:\n{}", response);
-            
+
             return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(response);
