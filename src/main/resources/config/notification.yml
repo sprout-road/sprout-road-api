@@ -1,0 +1,4 @@
+app:
+  notification:
+    web-hook:
+      url: ${NOTIFICATION_WEB_HOOK_URL}

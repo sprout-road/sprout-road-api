@@ -11,6 +11,7 @@ spring:
       - classpath:/config/aws.yml
       - classpath:/config/swagger.yml
       - classpath:/config/ai.yml
+      - classpath:/config/notification.yml
 
 server:
   tomcat:
