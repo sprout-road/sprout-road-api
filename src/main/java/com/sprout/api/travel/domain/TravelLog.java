@@ -29,7 +29,7 @@ public class TravelLog extends TimeBaseEntity {
     private Long id;
 
     private Long userId;
-    private String sigunguCode;
+    private String regionCode;
     private String title;
     private LocalDate traveledAt;
 
@@ -37,7 +37,7 @@ public class TravelLog extends TimeBaseEntity {
     @OneToMany(mappedBy = "travelLog", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ContentBlock> contentBlocks = new ArrayList<>();
 
-    public static TravelLog of(Long userId, String sigunguCode, String title, LocalDate traveledAt) {
+    public static TravelLog of(Long userId, String regionCode, String title, LocalDate traveledAt) {
         if (title == null || title.isEmpty()) {
             throw new IllegalArgumentException();
         }
@@ -46,7 +46,7 @@ public class TravelLog extends TimeBaseEntity {
         }
         return TravelLog.builder()
             .userId(userId)
-            .sigunguCode(sigunguCode)
+            .regionCode(regionCode)
             .title(title)
             .traveledAt(traveledAt)
             .build();

@@ -7,7 +7,6 @@ public interface SigunguRepository {
 
     long count();
     void saveAll(List<Sigungu> sigungus);
-    String findAllAsGeoJson();
     String findBySidoCodeAsGeoJson(String sidoCode);
     SigunguLocationInfo findByContainsPoint(double lng, double lat);
 }

@@ -8,13 +8,13 @@ import java.util.List;
 public record CreateTravelLogCommand(
     Long userId,
     String title,
-    String sigunguCode,
+    String regionCode,
     LocalDate traveledAt,
     List<ContentBlockCommand> contents
 ) {
 
     public TravelLog toTravelLog() {
-        return TravelLog.of(userId, sigunguCode, title, traveledAt);
+        return TravelLog.of(userId, regionCode, title, traveledAt);
     }
 
     public List<ContentBlock> toContentBlocks() {

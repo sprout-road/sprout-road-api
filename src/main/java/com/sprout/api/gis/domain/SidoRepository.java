@@ -10,7 +10,5 @@ public interface SidoRepository {
 
     String findAllAsGeoJson();
 
-    String findSidoNameBySidoCode(String sidoCode);
-
     String findSidoBoundaries(String sidoCode);
 }

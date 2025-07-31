@@ -8,13 +8,13 @@ import java.util.List;
 
 public record TravelLogCreateRequest(
     String title,
-    String sigunguCode,
+    String regionCode,
     LocalDate traveledAt,
     List<ContentBlockDto> contents
 ) {
 
     public CreateTravelLogCommand toCommand(Long userId) {
         List<ContentBlockCommand> contentBlockCommands = contents.stream().map(ContentBlockDto::toCommand).toList();
-        return new CreateTravelLogCommand(userId, title, sigunguCode, traveledAt, contentBlockCommands);
+        return new CreateTravelLogCommand(userId, title, regionCode, traveledAt, contentBlockCommands);
     }
 }

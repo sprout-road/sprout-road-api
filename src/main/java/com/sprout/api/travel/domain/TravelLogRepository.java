@@ -10,7 +10,7 @@ public interface TravelLogRepository extends JpaRepository<TravelLog, Long> {
     @Query("""
         select new com.sprout.api.travel.application.result.RegionLogResult(t.id, t.traveledAt, t.title)
         from TravelLog t
-        where t.userId=:userId and t.sigunguCode=:sigunguCode
+        where t.userId=:userId and t.regionCode=:sigunguCode
         order by t.id desc
     """)
     List<RegionLogResult> findAllBySigunguCodeAndUserId(String sigunguCode, Long userId);
