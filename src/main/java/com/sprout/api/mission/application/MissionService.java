@@ -21,12 +21,12 @@ public class MissionService {
     private final Clock clock;
 
     public void saveMissions(String regionCode, List<AiMissionResponse> aiMissions) {
-        LocalDate now = LocalDate.now(clock);
-        if (missionJpaRepository.existsByRegionCodeAndMissionDate(regionCode, now)) {
-            log.info("미션이 이미 존재함 - 스킵: {} [{}]", regionCode, now);
+        LocalDate tomorrow = LocalDate.now(clock).plusDays(1);
+        if (missionJpaRepository.existsByRegionCodeAndMissionDate(regionCode, tomorrow)) {
+            log.info("미션이 이미 존재함 - 스킵: {} [{}]", regionCode, tomorrow);
             return;
         }
-        List<Mission> missions = parse(regionCode, aiMissions, now);
+        List<Mission> missions = parse(regionCode, aiMissions, tomorrow);
         missionJpaRepository.saveAll(missions);
         log.info("미션 저장 완료: {} - {}개", regionCode, missions.size());
     }
