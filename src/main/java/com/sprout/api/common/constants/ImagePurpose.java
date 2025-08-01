@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 public enum ImagePurpose {
 
     TRAVEL_LOG("travel_log"),
+    DAILY_MISSION("daily_mission"),
     ;
 
     private final String value;

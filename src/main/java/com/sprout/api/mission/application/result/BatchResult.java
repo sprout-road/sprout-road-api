@@ -11,7 +11,7 @@ public class BatchResult {
     private final List<String> successRegions = new ArrayList<>();
     private final List<String> failRegions = new ArrayList<>();
     private final LocalDateTime startTime = LocalDateTime.now();
-    private int totalExpected; // 추가
+    private int totalExpected;
 
     public BatchResult(int totalExpected) {
         this.totalExpected = totalExpected;

@@ -68,4 +68,8 @@ public class Mission {
             .description(description)
             .build();
     }
+
+    public String getTypeValue() {
+        return type.getValue();
+    }
 }

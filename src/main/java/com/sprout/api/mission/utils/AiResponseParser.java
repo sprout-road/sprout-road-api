@@ -3,7 +3,6 @@ package com.sprout.api.mission.utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sprout.api.mission.application.DefaultMissionProvider;
 import com.sprout.api.mission.application.dto.AiMissionResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Component;
 public class AiResponseParser {
     
     private final JsonExtractor jsonExtractor;
-    private final DefaultMissionProvider defaultMissionProvider;
     private final ObjectMapper objectMapper;
     
     public List<AiMissionResponse> parseToMissions(String aiResponse) {
@@ -24,7 +22,7 @@ public class AiResponseParser {
             return this.parseAiResponse(aiResponse);
         } catch (Exception e) {
             log.error("AI 응답 파싱 실패, 기본 미션 사용: {}", e.getMessage());
-            return defaultMissionProvider.getDefaultMissions();
+            return DefaultMissionProvider.getDefaultMissions();
         }
     }
     
