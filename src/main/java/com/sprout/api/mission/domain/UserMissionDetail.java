@@ -53,6 +53,8 @@ public class UserMissionDetail extends TimeBaseEntity {
     @Column(nullable = false)
     private Boolean completed = false;
 
+    private String submissionContent;
+
     @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "participation_id", nullable = false)
@@ -76,11 +78,11 @@ public class UserMissionDetail extends TimeBaseEntity {
         return this.id.equals(id);
     }
 
-    public void submit(String type, String description) {
+    public void submit(String type, String submissionContent) {
         if (!this.type.equals(type)) {
             throw new IllegalArgumentException("잘못된 접근입니다.");
         }
-        this.description = description;
+        this.submissionContent = submissionContent;
         this.completed = true;
     }
 

@@ -76,7 +76,7 @@ public class UserMissionService {
         validateCanSubmission(todayParticipation);
 
         UserMissionDetail mission = todayParticipation.getMission(command.missionId());
-        mission.submit(command.type(), command.description());
+        mission.submit(command.type(), command.submissionContent());
         processMissionSideEffect(mission);
 
         return rewardClient.getRegionReward(command.regionCode());

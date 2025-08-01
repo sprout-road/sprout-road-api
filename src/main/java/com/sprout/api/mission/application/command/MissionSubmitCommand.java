@@ -5,6 +5,6 @@ public record MissionSubmitCommand(
     Long missionId,
     String regionCode,
     String type,
-    String description
+    String submissionContent
 ) {
 }
