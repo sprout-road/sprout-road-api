@@ -1,5 +1,6 @@
 package com.sprout.api.gis.infrastructure.geotools;
 
+import com.sprout.api.common.exception.BusinessException;
 import com.sprout.api.gis.application.command.ShapefileUploadCommand;
 import com.sprout.api.gis.domain.Sido;
 import java.io.File;
@@ -29,7 +30,7 @@ public class SidoGisParser {
             return parseSidoData(tempShpFile);
         } catch (Exception e) {
             log.error("시/도 Shapefile 파싱 실패: {}", e.getMessage(), e);
-            throw new RuntimeException("시/도 Shapefile 파싱 실패", e);
+            throw new BusinessException(500, "시/도 Shapefile 파싱 실패");
         }
     }
 
@@ -68,7 +69,7 @@ public class SidoGisParser {
             return results;
         } catch (Exception e) {
             log.error("시/도 Shapefile 파싱 오류: {}", e.getMessage(), e);
-            throw new RuntimeException("시/도 Shapefile 파싱 실패", e);
+            throw new BusinessException(500, "시/도 Shapefile 파싱 실패");
         }
     }
 }

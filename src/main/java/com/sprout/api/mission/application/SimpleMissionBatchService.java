@@ -52,7 +52,7 @@ public class SimpleMissionBatchService {
 
     private void processRegion(RegionInfoDto region, BatchResult result) {
         try {
-            String prompt = buildMissionPrompt(region.getRegionCode(), region.getRegionName());
+            String prompt = buildMissionPrompt(region.getRegionName());
             String aiResponse = geminiTemplate.generate(prompt);
             List<AiMissionResponse> missions = aiResponseParser.parseToMissions(aiResponse);
             missionService.saveMissions(region.getRegionCode(), missions);

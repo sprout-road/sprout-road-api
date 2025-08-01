@@ -1,5 +1,6 @@
 package com.sprout.api.gis.infrastructure.jpa.impl;
 
+import com.sprout.api.common.exception.BusinessException;
 import com.sprout.api.gis.domain.Sigungu;
 import com.sprout.api.gis.domain.SigunguRepository;
 import com.sprout.api.gis.domain.dto.SigunguLocationInfo;
@@ -32,7 +33,7 @@ public class SigunguRepositoryImpl implements SigunguRepository {
     @Override
     public SigunguLocationInfo findByContainsPoint(double lng, double lat) {
         return sigunguJpaRepository.findByContainsPoint(lng, lat)
-            .orElseThrow(IllegalArgumentException::new);
+            .orElseThrow(() -> new BusinessException(404, "해당 위치의 지역 정보는 없음"));
     }
 
 

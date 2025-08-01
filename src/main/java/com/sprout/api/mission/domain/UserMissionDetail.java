@@ -1,6 +1,7 @@
 package com.sprout.api.mission.domain;
 
 import com.sprout.api.common.entity.TimeBaseEntity;
+import com.sprout.api.common.exception.BusinessException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -80,7 +81,7 @@ public class UserMissionDetail extends TimeBaseEntity {
 
     public void submit(String type, String submissionContent) {
         if (!this.type.equals(type)) {
-            throw new IllegalArgumentException("잘못된 접근입니다.");
+            throw new BusinessException(400, "잘못된 접근입니다.");
         }
         this.submissionContent = submissionContent;
         this.completed = true;

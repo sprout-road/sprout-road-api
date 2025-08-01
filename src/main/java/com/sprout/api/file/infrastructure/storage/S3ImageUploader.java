@@ -2,6 +2,7 @@ package com.sprout.api.file.infrastructure.storage;
 
 import com.sprout.api.common.client.dto.FileMetaData;
 import com.sprout.api.common.constants.ImagePurpose;
+import com.sprout.api.common.exception.BusinessException;
 import com.sprout.api.common.utils.ObjectValidator;
 import com.sprout.api.file.util.IdUtil;
 import com.sprout.api.file.util.TimeUtil;
@@ -37,9 +38,11 @@ public class S3ImageUploader {
 			s3Client.putObject(request, RequestBody.fromInputStream(inputStream, metaData.contentSize()));
 			return getFullImageUrl(imageKey);
 		} catch (S3Exception e) {
-			throw new IllegalArgumentException("S3 업로드 중 예외 발생: ", e);
+			log.error("S3 업로드 중 예외 발생: ", e);
+			throw new BusinessException(501, "이미지 업로드 중 버그 발생");
 		} catch (IOException e) {
-            throw new IllegalArgumentException("스트림 읽어 오는 중 예외 발생: ", e);
+			log.error("스트림 읽어 오는 중 예외 발생: ", e);
+            throw new BusinessException(500, "서버에서 파일 읽다가 버그 발생");
         }
     }
 
@@ -52,7 +55,7 @@ public class S3ImageUploader {
 		String baseUrl = s3Properties.getBaseUrl();
 		String imageUrlPrefix = String.format("%s/%s", baseUrl, IMAGE_KEY_PREFIX);
 		if (!imageUrl.startsWith(imageUrlPrefix)) {
-			throw new IllegalArgumentException("s3 file key가 아님");
+			throw new BusinessException(400, "우리 서비스에서 사용하는 이미지 파일이 아닙니다.");
 		}
 		return imageUrl.substring(baseUrl.length() + 1);
 	}
@@ -87,7 +90,7 @@ public class S3ImageUploader {
 			s3Client.deleteObject(deleteRequest);
 		} catch (S3Exception e) {
 			log.error("S3 파일 삭제 실패 - key: {}", imageKey, e);
-			throw new IllegalStateException("S3 파일 삭제 실패: " + imageKey, e);
+			// todo: slack 알림
 		}
 	}
 }

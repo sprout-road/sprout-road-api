@@ -1,6 +1,7 @@
 package com.sprout.api.gis.infrastructure.jpa.impl;
 
 import com.sprout.api.common.client.dto.RegionInfoDto;
+import com.sprout.api.common.exception.BusinessException;
 import com.sprout.api.gis.application.result.LocationResult;
 import com.sprout.api.gis.domain.RegionRepository;
 import com.sprout.api.gis.infrastructure.jpa.SidoJpaRepository;
@@ -36,7 +37,7 @@ public class RegionRepositoryImpl implements RegionRepository {
         return sidoJpaRepository.findSpecialCityPoint(lng, lat)
             .orElseGet(() -> {
                 LocationResult locationResult = sigunguJpaRepository.findCityPoint(lng, lat)
-                    .orElseThrow(() -> new IllegalArgumentException("no city point"));
+                    .orElseThrow(() -> new BusinessException(404, "해당 위치의 지역 정보는 없음"));
                 String cityName = locationResult.getRegionName();
                 log.info("cityName: {}", cityName);
                 String regionName = GisUtil.getRegionName(locationResult.getRegionCode().substring(0, 2));

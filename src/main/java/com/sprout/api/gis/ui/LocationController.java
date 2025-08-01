@@ -26,18 +26,9 @@ public class LocationController implements LocationControllerDocs {
         @RequestParam Double lng
     ) {
         log.info("🗺️ 위치 하이라이트 요청: lat={}, lng={}", lat, lng);
-        // todo: 나중에 리팩토링 할 예정 우선은 기능 구현 먼저 할 것
-        try {
-            LocationHighlightDto highlight = locationService.findLocationForHighlight(lat, lng);
-            log.info("✅ 위치 분석 완료: {} - {}", highlight.targetName(), highlight.reason());
-            return ResponseEntity.ok(highlight);
-        } catch (IllegalArgumentException e) {
-            log.warn("❌ 잘못된 좌표: {}", e.getMessage());
-            return ResponseEntity.badRequest().build();
-        } catch (Exception e) {
-            log.error("❌ 위치 분석 실패: {}", e.getMessage(), e);
-            return ResponseEntity.internalServerError().build();
-        }
+        LocationHighlightDto highlight = locationService.findLocationForHighlight(lat, lng);
+        log.info("✅ 위치 분석 완료: {} - {}", highlight.targetName(), highlight.reason());
+        return ResponseEntity.ok(highlight);
     }
 
     @GetMapping("/v2/locate")
@@ -46,17 +37,8 @@ public class LocationController implements LocationControllerDocs {
         @RequestParam Double lng
     ) {
         log.info("🗺️ 위치 하이라이트 요청: lat={}, lng={}", lat, lng);
-        // todo: 나중에 리팩토링 할 예정 우선은 기능 구현 먼저 할 것
-        try {
-            LocationResult result = locationService.findLocation(lat, lng);
-            log.info("✅ 위치 분석 완료: {} - {}", result.getRegionCode(), result.getRegionName());
-            return ResponseEntity.ok(result);
-        } catch (IllegalArgumentException e) {
-            log.warn("❌ 잘못된 좌표: {}", e.getMessage());
-            return ResponseEntity.badRequest().build();
-        } catch (Exception e) {
-            log.error("❌ 위치 분석 실패: {}", e.getMessage(), e);
-            return ResponseEntity.internalServerError().build();
-        }
+        LocationResult result = locationService.findLocation(lat, lng);
+        log.info("✅ 위치 분석 완료: {} - {}", result.getRegionCode(), result.getRegionName());
+        return ResponseEntity.ok(result);
     }
 }

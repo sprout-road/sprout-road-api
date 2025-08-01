@@ -1,5 +1,6 @@
 package com.sprout.api.gis.infrastructure.geotools;
 
+import com.sprout.api.common.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.geotools.api.referencing.operation.MathTransform;
@@ -39,7 +40,7 @@ public class CoordinateConverter {
 
         } catch (Exception e) {
             log.error("WGS84 변환 실패: {}", e.getMessage(), e);
-            throw new RuntimeException("좌표 변환 실패", e);
+            throw new BusinessException(500, "서버에서 좌표 변환 실패");
         }
     }
 }

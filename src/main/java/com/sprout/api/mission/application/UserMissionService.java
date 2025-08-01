@@ -2,6 +2,7 @@ package com.sprout.api.mission.application;
 
 import com.sprout.api.common.client.ImageManageClient;
 import com.sprout.api.common.client.RewardClient;
+import com.sprout.api.common.exception.BusinessException;
 import com.sprout.api.mission.application.command.MissionSubmitCommand;
 import com.sprout.api.mission.application.command.RefreshCommand;
 import com.sprout.api.mission.application.result.UserDailyMissionResult;
@@ -61,7 +62,7 @@ public class UserMissionService {
 
     private static void validateCanRefresh(UserMissionParticipation todayParticipation) {
         if (!todayParticipation.canRefresh()) {
-            throw new IllegalStateException("더 이상 새로고침할 수 없습니다.");
+            throw new BusinessException(400, "더 이상 새로고침할 수 없습니다.");
         }
     }
 
@@ -90,7 +91,7 @@ public class UserMissionService {
 
     private static void validateCanSubmission(UserMissionParticipation todayParticipation) {
         if (todayParticipation.getCompletedMissionCount() >= 5) {
-            throw new IllegalStateException("오늘 모든 미션을 완료했습니다.");
+            throw new BusinessException(400, "오늘 모든 미션을 완료했습니다.");
         }
     }
 }

@@ -2,6 +2,7 @@ package com.sprout.api.file.domain;
 
 import com.sprout.api.common.constants.ImagePurpose;
 import com.sprout.api.common.entity.TimeBaseEntity;
+import com.sprout.api.common.exception.BusinessException;
 import com.sprout.api.common.utils.ObjectValidator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -47,7 +48,7 @@ public class ImageEntity extends TimeBaseEntity {
 
 	public void markAsUsed() {
 		if (isDeleted()) {
-			throw new IllegalArgumentException("삭제된 이미지의 상태를 변경할 수 없습니다");
+			throw new BusinessException(400, "삭제된 이미지의 상태를 변경할 수 없습니다");
 		}
 		this.status = ImageStatus.USED;
 	}

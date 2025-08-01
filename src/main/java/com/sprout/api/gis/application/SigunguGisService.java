@@ -1,5 +1,6 @@
 package com.sprout.api.gis.application;
 
+import com.sprout.api.common.exception.BusinessException;
 import com.sprout.api.gis.application.command.ShapefileUploadCommand;
 import com.sprout.api.gis.domain.Sigungu;
 import com.sprout.api.gis.domain.SigunguRepository;
@@ -22,7 +23,7 @@ public class SigunguGisService {
     public void uploadSigunguShapefile(ShapefileUploadCommand command) {
         shapefileValidator.validate(command);
         if (sigunguRepository.count() > 0) {
-            throw new IllegalStateException();
+            throw new BusinessException(400, "이미 지도 정보를 생성했음");
         }
 
         List<Sigungu> parse = sigunguParser.parse(command);

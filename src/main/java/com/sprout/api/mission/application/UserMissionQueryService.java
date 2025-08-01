@@ -1,5 +1,6 @@
 package com.sprout.api.mission.application;
 
+import com.sprout.api.common.exception.BusinessException;
 import com.sprout.api.mission.application.result.UserDailyMissionResult;
 import com.sprout.api.mission.domain.UserMissionParticipation;
 import com.sprout.api.mission.domain.UserMissionRepository;
@@ -24,7 +25,7 @@ public class UserMissionQueryService {
 
     public void validateUserMission(String regionCode, Long userId, LocalDate missionDate) {
         if (userMissionRepository.existsByUserIdAndRegionCodeAndMissionDate(userId, regionCode, missionDate)) {
-            throw new IllegalStateException("이미 시작된 미션입니다.");
+            throw new BusinessException(400, "이미 시작된 미션입니다.");
         }
     }
 
@@ -36,6 +37,6 @@ public class UserMissionQueryService {
     public UserMissionParticipation getTodayParticipation(Long userId, String regionCode) {
         LocalDate today = LocalDate.now(clock);
         return userMissionRepository.findByUserIdAndRegionCodeAndMissionDate(userId, regionCode, today)
-                .orElseThrow(() -> new IllegalStateException("시작된 미션이 없습니다."));
+                .orElseThrow(() -> new BusinessException(404, "시작된 미션이 없습니다."));
     }
 }

@@ -1,5 +1,6 @@
 package com.sprout.api.mission.application;
 
+import com.sprout.api.common.exception.BusinessException;
 import com.sprout.api.mission.domain.Mission;
 import com.sprout.api.mission.domain.MissionJpaRepository;
 import java.time.Clock;
@@ -25,6 +26,6 @@ public class MissionQueryService {
     public Mission getTodayMisisonByPosition(String regionCode, int position) {
         LocalDate today = LocalDate.now(clock);
         return missionRepository.findByRegionCodeAndMissionDateAndPosition(regionCode, today, position)
-            .orElseThrow(() -> new IllegalArgumentException("찾을 수 없는 미션 정보입니다."));
+            .orElseThrow(() -> new BusinessException(404, "찾을 수 없는 미션 정보입니다."));
     }
 }
