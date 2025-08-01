@@ -26,25 +26,14 @@ public class JsonUtils {
 
     public static String convertIntListToString(List<Integer> intList) {
         if (intList == null || intList.isEmpty()) {
-            return "[]";
+            return "[0,1,2,3,4,5]";
         }
         
         try {
             return objectMapper.writeValueAsString(intList);
         } catch (JsonProcessingException e) {
             log.error("JSON 변환 오류: {}", intList, e);
-            return "[]";
+            return "[0,1,2,3,4]";
         }
-    }
-    
-    /**
-     * 초기 미션 설정용 헬퍼 메서드
-     */
-    public static String getInitialVisibleMissions() {
-        return "[1,2,3,4,5]";
-    }
-    
-    public static String getInitialShownMissions() {
-        return "[1,2,3,4,5]";
     }
 }

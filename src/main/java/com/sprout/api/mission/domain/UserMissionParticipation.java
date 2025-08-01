@@ -1,6 +1,7 @@
 package com.sprout.api.mission.domain;
 
 import com.sprout.api.common.entity.TimeBaseEntity;
+import com.sprout.api.common.exception.BusinessException;
 import com.sprout.api.mission.utils.JsonUtils;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -105,6 +106,6 @@ public class UserMissionParticipation extends TimeBaseEntity {
         return getMissions().stream()
             .filter(m -> m.match(missionId))
             .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("해당 미션을 찾을 수 없습니다."));
+            .orElseThrow(() -> new BusinessException(404, "해당 미션을 찾을 수 없습니다."));
     }
 }

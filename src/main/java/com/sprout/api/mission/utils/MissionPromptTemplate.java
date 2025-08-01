@@ -75,7 +75,7 @@ public class MissionPromptTemplate {
     8. JSON 형태로 10개 미션 출력
     """;
 
-    public static String buildMissionPrompt(String regionCode, String regionName) {
+    public static String buildMissionPrompt(String regionName) {
         LocalDate date = LocalDate.now();
         return String.format(MISSION_GENERATION_PROMPT,
             regionName, date, regionName, regionName, regionName, regionName);
