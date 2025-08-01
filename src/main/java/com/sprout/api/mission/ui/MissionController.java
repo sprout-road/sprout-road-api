@@ -4,13 +4,17 @@ import com.sprout.api.common.client.ImageManageClient;
 import com.sprout.api.common.client.dto.FileMetaData;
 import com.sprout.api.common.constants.ImagePurpose;
 import com.sprout.api.common.utils.FileMetaDataExtractor;
+import com.sprout.api.mission.application.MissionService;
 import com.sprout.api.mission.application.UserMissionQueryService;
 import com.sprout.api.mission.application.UserMissionService;
 import com.sprout.api.mission.application.command.MissionSubmitCommand;
 import com.sprout.api.mission.application.command.RefreshCommand;
 import com.sprout.api.mission.application.result.UserDailyMissionResult;
+import com.sprout.api.mission.domain.UserMissionRepository;
+import com.sprout.api.mission.domain.dto.RegionMissionCountDto;
 import com.sprout.api.mission.ui.docs.MissionControllerDocs;
 import com.sprout.api.mission.ui.dto.MissionSubmitRequest;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +34,7 @@ public class MissionController implements MissionControllerDocs {
 
     private final UserMissionQueryService userMissionQueryService;
     private final UserMissionService userMissionService;
+    private final UserMissionRepository userMissionRepository;
     private final FileMetaDataExtractor fileMetaDataExtractor;
     private final ImageManageClient imageManageClient;
 
@@ -82,5 +87,12 @@ public class MissionController implements MissionControllerDocs {
         FileMetaData imageMetaData = fileMetaDataExtractor.extractFrom(imageFile);
         String imageUrl = imageManageClient.uploadImage(imageMetaData, ImagePurpose.DAILY_MISSION);
         return ResponseEntity.ok(imageUrl);
+    }
+
+    @GetMapping("/history")
+    public ResponseEntity<List<RegionMissionCountDto>> getMissionHistory() {
+        Long userId = 1L;
+        List<RegionMissionCountDto> result = userMissionRepository.findCompletedMissionCountByRegion(userId);
+        return ResponseEntity.ok(result);
     }
 }

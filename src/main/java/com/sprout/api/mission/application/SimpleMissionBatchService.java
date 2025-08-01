@@ -27,7 +27,7 @@ public class SimpleMissionBatchService {
     private final AiResponseParser aiResponseParser;
     private final RegionClient regionClient;
 
-    @Scheduled(cron = "0 0 3 * * ?", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 0 6 * * ?", zone = "Asia/Seoul")
     public void testSpecialCityBatch() {
         try {
             List<RegionInfoDto> allRegions = regionClient.getAllRegions();
