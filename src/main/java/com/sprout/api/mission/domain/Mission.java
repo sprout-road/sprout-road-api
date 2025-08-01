@@ -16,6 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.geolatte.geom.M;
 
 @Entity
 @Table(name = "missions",
@@ -51,4 +52,20 @@ public class Mission {
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String description;
+
+    public static Mission create(
+        String regionCode,
+        LocalDate now,
+        Integer position,
+        MissionType type,
+        String description
+    ) {
+        return Mission.builder()
+            .regionCode(regionCode)
+            .missionDate(now)
+            .position(position)
+            .type(type)
+            .description(description)
+            .build();
+    }
 }
