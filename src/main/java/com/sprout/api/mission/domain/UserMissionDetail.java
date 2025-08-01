@@ -39,9 +39,6 @@ public class UserMissionDetail extends TimeBaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(nullable = false)
-    private Integer position;
-    
     @Column(nullable = false, length = 20)
     private String type;
     
@@ -61,9 +58,8 @@ public class UserMissionDetail extends TimeBaseEntity {
     @JoinColumn(name = "participation_id", nullable = false)
     private UserMissionParticipation participation;
 
-    public static UserMissionDetail create(int position, String type, String description) {
+    public static UserMissionDetail create(String type, String description) {
         return UserMissionDetail.builder()
-            .position(position)
             .type(type)
             .description(description)
             .build();
@@ -75,12 +71,20 @@ public class UserMissionDetail extends TimeBaseEntity {
         this.refreshCount++;
         this.completed = false;
     }
-    
-    public void complete() {
+
+    public boolean match(Long id) {
+        return this.id.equals(id);
+    }
+
+    public void submit(String type, String description) {
+        if (!this.type.equals(type)) {
+            throw new IllegalArgumentException("잘못된 접근입니다.");
+        }
+        this.description = description;
         this.completed = true;
     }
 
-    public boolean match(Long id, int position) {
-        return this.id.equals(id) && this.position.equals(position);
+    public boolean isImageMission() {
+        return this.type.equals("picture");
     }
 }

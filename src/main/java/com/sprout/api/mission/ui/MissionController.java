@@ -2,10 +2,11 @@ package com.sprout.api.mission.ui;
 
 import com.sprout.api.mission.application.UserMissionQueryService;
 import com.sprout.api.mission.application.UserMissionService;
+import com.sprout.api.mission.application.command.MissionSubmitCommand;
 import com.sprout.api.mission.application.command.RefreshCommand;
 import com.sprout.api.mission.application.result.UserDailyMissionResult;
 import com.sprout.api.mission.ui.docs.MissionControllerDocs;
-import com.sprout.api.mission.ui.dto.RefreshRequest;
+import com.sprout.api.mission.ui.dto.MissionSubmitRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,35 +24,47 @@ public class MissionController implements MissionControllerDocs {
     private final UserMissionQueryService userMissionQueryService;
     private final UserMissionService userMissionService;
 
-    @GetMapping("{regionCode}/status")
+    @GetMapping("/regions/{regionCode}/status")
     public ResponseEntity<Boolean> getMissionStatus(@PathVariable String regionCode) {
         Long userId = 1L;
         boolean result = userMissionQueryService.existsTodayMission(regionCode, userId);
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("{regionCode}/start")
+    @PostMapping("/regions/{regionCode}/start")
     public ResponseEntity<UserDailyMissionResult> startMission(@PathVariable String regionCode) {
         Long userId = 1L; // 임시 사용자
         UserDailyMissionResult result = userMissionService.startTodayMission(userId, regionCode);
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/{regionCode}")
+    @GetMapping("/regions/{regionCode}")
     public ResponseEntity<UserDailyMissionResult> getMissions(@PathVariable String regionCode) {
         Long userId = 1L; // 임시 사용자
         UserDailyMissionResult result = userMissionQueryService.getTodayMissions(userId, regionCode);
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/{missionId}/refresh")
+    @PostMapping("/{missionId}/regions/{regionCode}/refresh")
     public ResponseEntity<UserDailyMissionResult> refresh(
         @PathVariable Long missionId,
-        @RequestBody RefreshRequest refreshRequest
+        @PathVariable String regionCode
     ) {
         Long userId = 1L; // 임시 사용자
-        RefreshCommand command = refreshRequest.toCommand(userId, missionId);
+        RefreshCommand command = new RefreshCommand(userId, missionId, regionCode);
         UserDailyMissionResult result = userMissionService.refresh(command);
         return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/{missionId}/regions/{regionCode}/submit")
+    public ResponseEntity<String> submitWriting(
+        @PathVariable Long missionId,
+        @PathVariable String regionCode,
+        @RequestBody MissionSubmitRequest request
+    ) {
+        Long userId = 1L;
+        MissionSubmitCommand command = request.toCommand(userId, missionId, regionCode);
+        String reward = userMissionService.submitWriting(command);
+        return ResponseEntity.ok(reward);
     }
 }

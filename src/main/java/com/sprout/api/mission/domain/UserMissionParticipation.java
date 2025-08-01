@@ -67,27 +67,6 @@ public class UserMissionParticipation extends TimeBaseEntity {
         mission.setParticipation(this);
     }
 
-    public void removeMission(UserMissionDetail mission) {
-        missions.remove(mission);
-        mission.setParticipation(null);
-    }
-
-    public UserMissionDetail getMission(int position) {
-        return missions.stream()
-            .filter(m -> m.getPosition().equals(position))
-            .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("Mission not found: position " + position));
-    }
-
-    public UserMissionDetail refreshMission(int position, String newType, String newDescription) {
-        if (!canRefresh()) {
-            throw new IllegalArgumentException("최대 재시도 횟수 초과");
-        }
-        UserMissionDetail mission = getMission(position);
-        mission.refresh(newType, newDescription);
-        return mission;
-    }
-
     public int getTotalRefreshCount() {
         return missions.stream()
             .mapToInt(UserMissionDetail::getRefreshCount)
@@ -122,9 +101,9 @@ public class UserMissionParticipation extends TimeBaseEntity {
         this.shownMissionPositions = JsonUtils.convertIntListToString(shown);
     }
 
-    public UserMissionDetail getMission(Long missionId, int position) {
+    public UserMissionDetail getMission(Long missionId) {
         return getMissions().stream()
-            .filter(m -> m.match(missionId, position))
+            .filter(m -> m.match(missionId))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException("해당 미션을 찾을 수 없습니다."));
     }
