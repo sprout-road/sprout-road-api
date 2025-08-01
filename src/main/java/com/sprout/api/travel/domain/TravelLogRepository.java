@@ -13,5 +13,5 @@ public interface TravelLogRepository extends JpaRepository<TravelLog, Long> {
         where t.userId=:userId and t.regionCode=:sigunguCode
         order by t.id desc
     """)
-    List<RegionLogResult> findAllBySigunguCodeAndUserId(String sigunguCode, Long userId);
+    List<RegionLogResult> findAllByRegionCodeAndUserId(String regionCode, Long userId);
 }

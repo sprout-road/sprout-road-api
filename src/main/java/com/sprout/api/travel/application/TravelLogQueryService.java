@@ -24,7 +24,7 @@ public class TravelLogQueryService {
         return TravelDetailResult.of(travelLog);
     }
 
-    public List<RegionLogResult> getTravelLogsByRegion(String sigunguCode, Long userId) {
-        return travelLogRepository.findAllBySigunguCodeAndUserId(sigunguCode, userId);
+    public List<RegionLogResult> getTravelLogsByRegion(String regionCode, Long userId) {
+        return travelLogRepository.findAllByRegionCodeAndUserId(regionCode, userId);
     }
 }

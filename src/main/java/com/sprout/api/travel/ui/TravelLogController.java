@@ -38,10 +38,10 @@ public class TravelLogController implements TravelLogControllerDocs {
     private final ImageManageClient imageManageClient;
 
     @GetMapping
-    public ResponseEntity<List<RegionLogResult>> getAllMyTravelLogs(@RequestParam String sigunguCode) {
+    public ResponseEntity<List<RegionLogResult>> getAllMyTravelLogs(@RequestParam String regionCode) {
         // 임시 사용자 정보로만 진행 -> 인증 및 사용자 컨텍스트는 제일 마지막
         Long userId = 1L;
-        List<RegionLogResult> result = travelLogQueryService.getTravelLogsByRegion(sigunguCode, userId);
+        List<RegionLogResult> result = travelLogQueryService.getTravelLogsByRegion(regionCode, userId);
         return ResponseEntity.ok(result);
     }
 
