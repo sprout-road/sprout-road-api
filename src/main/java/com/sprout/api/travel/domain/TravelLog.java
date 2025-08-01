@@ -1,6 +1,7 @@
 package com.sprout.api.travel.domain;
 
 import com.sprout.api.common.entity.TimeBaseEntity;
+import com.sprout.api.common.exception.BusinessException;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -39,10 +40,10 @@ public class TravelLog extends TimeBaseEntity {
 
     public static TravelLog of(Long userId, String regionCode, String title, LocalDate traveledAt) {
         if (title == null || title.isEmpty()) {
-            throw new IllegalArgumentException();
+            throw new BusinessException(400, "제목은 필수");
         }
         if (title.length() > 10) {
-            throw new IllegalArgumentException();
+            throw new BusinessException(400, "제목 길이 10자 제한");
         }
         return TravelLog.builder()
             .userId(userId)
