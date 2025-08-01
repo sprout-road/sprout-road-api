@@ -98,6 +98,10 @@ public class UserMissionParticipation extends TimeBaseEntity {
         return getTotalRefreshCount() < 5;
     }
 
+    public int getRemainingRefreshCount() {
+        return 5 - getTotalRefreshCount();
+    }
+
     public int getCompletedMissionCount() {
         return (int) missions.stream()
             .filter(UserMissionDetail::getCompleted)
@@ -116,5 +120,12 @@ public class UserMissionParticipation extends TimeBaseEntity {
         List<Integer> shown = JsonUtils.parseStringToIntList(shownMissionPositions);
         shown.add(newPosition);
         this.shownMissionPositions = JsonUtils.convertIntListToString(shown);
+    }
+
+    public UserMissionDetail getMission(Long missionId, int position) {
+        return getMissions().stream()
+            .filter(m -> m.match(missionId, position))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException("해당 미션을 찾을 수 없습니다."));
     }
 }

@@ -17,7 +17,7 @@ public class UserDailyMissionResult {
 
     public static UserDailyMissionResult from(UserMissionParticipation userMissionParticipation) {
         return new UserDailyMissionResult(
-            userMissionParticipation.getTotalRefreshCount(),
+            userMissionParticipation.getRemainingRefreshCount(),
             extractUserMissions(userMissionParticipation)
         );
     }

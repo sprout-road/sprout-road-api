@@ -79,4 +79,8 @@ public class UserMissionDetail extends TimeBaseEntity {
     public void complete() {
         this.completed = true;
     }
+
+    public boolean match(Long id, int position) {
+        return this.id.equals(id) && this.position.equals(position);
+    }
 }

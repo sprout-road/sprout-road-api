@@ -2,13 +2,16 @@ package com.sprout.api.mission.ui;
 
 import com.sprout.api.mission.application.UserMissionQueryService;
 import com.sprout.api.mission.application.UserMissionService;
+import com.sprout.api.mission.application.command.RefreshCommand;
 import com.sprout.api.mission.application.result.UserDailyMissionResult;
 import com.sprout.api.mission.ui.docs.MissionControllerDocs;
+import com.sprout.api.mission.ui.dto.RefreshRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,6 +41,17 @@ public class MissionController implements MissionControllerDocs {
     public ResponseEntity<UserDailyMissionResult> getMissions(@PathVariable String regionCode) {
         Long userId = 1L; // 임시 사용자
         UserDailyMissionResult result = userMissionQueryService.getTodayMissions(userId, regionCode);
+        return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/{missionId}/refresh")
+    public ResponseEntity<UserDailyMissionResult> refresh(
+        @PathVariable Long missionId,
+        @RequestBody RefreshRequest refreshRequest
+    ) {
+        Long userId = 1L; // 임시 사용자
+        RefreshCommand command = refreshRequest.toCommand(userId, missionId);
+        UserDailyMissionResult result = userMissionService.refresh(command);
         return ResponseEntity.ok(result);
     }
 }

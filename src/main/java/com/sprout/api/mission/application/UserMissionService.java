@@ -1,5 +1,6 @@
 package com.sprout.api.mission.application;
 
+import com.sprout.api.mission.application.command.RefreshCommand;
 import com.sprout.api.mission.application.result.UserDailyMissionResult;
 import com.sprout.api.mission.domain.Mission;
 import com.sprout.api.mission.domain.UserMissionDetail;
@@ -8,6 +9,7 @@ import com.sprout.api.mission.domain.UserMissionRepository;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +28,7 @@ public class UserMissionService {
         LocalDate today = LocalDate.now(clock);
         userMissionQueryService.validateUserMission(regionCode, userId, today);
 
-        List<Mission> masterMissions = missionQueryService.queryAllMissions(regionCode, today);
+        List<Mission> masterMissions = missionQueryService.getTodayMissionsByRegion(regionCode);
         UserMissionParticipation participation = UserMissionParticipation.create(userId, regionCode, today);
         for (int position = 0; position < 5; position++) {
             Mission mission = masterMissions.get(position);
@@ -37,5 +39,29 @@ public class UserMissionService {
 
         UserMissionParticipation savedParticipation = userMissionRepository.save(participation);
         return UserDailyMissionResult.from(savedParticipation);
+    }
+
+    public UserDailyMissionResult refresh(RefreshCommand command) {
+        UserMissionParticipation todayParticipation =
+            userMissionQueryService.getTodayParticipation(command.userId(), command.regionCode());
+
+        validateCanRefresh(todayParticipation);
+        Mission newMission = getMission(command.regionCode(), todayParticipation.getAvailablePositions());
+        UserMissionDetail targetMission = todayParticipation.getMission(command.missionId(), command.position());
+        targetMission.refresh(newMission.getTypeValue(), newMission.getDescription());
+        todayParticipation.addShownPosition(newMission.getPosition());
+
+        return UserDailyMissionResult.from(todayParticipation);
+    }
+
+    private static void validateCanRefresh(UserMissionParticipation todayParticipation) {
+        if (!todayParticipation.canRefresh()) {
+            throw new IllegalStateException("더 이상 새로고침할 수 없습니다.");
+        }
+    }
+
+    private Mission getMission(String regionCode, List<Integer> availablePositions) {
+        Integer newMissionPosition = availablePositions.get(new Random().nextInt(availablePositions.size()));
+        return missionQueryService.getTodayMisisonByPosition(regionCode, newMissionPosition);
     }
 }

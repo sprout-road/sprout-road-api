@@ -29,12 +29,13 @@ public class UserMissionQueryService {
     }
 
     public UserDailyMissionResult getTodayMissions(Long userId, String regionCode) {
+        UserMissionParticipation todayParticipation = getTodayParticipation(userId, regionCode);
+        return UserDailyMissionResult.from(todayParticipation);
+    }
+
+    public UserMissionParticipation getTodayParticipation(Long userId, String regionCode) {
         LocalDate today = LocalDate.now(clock);
-
-        UserMissionParticipation participation =
-            userMissionRepository.findByUserIdAndRegionCodeAndMissionDate(userId, regionCode, today)
+        return userMissionRepository.findByUserIdAndRegionCodeAndMissionDate(userId, regionCode, today)
                 .orElseThrow(() -> new IllegalStateException("시작된 미션이 없습니다."));
-
-        return UserDailyMissionResult.from(participation);
     }
 }
