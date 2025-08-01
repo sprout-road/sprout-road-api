@@ -5,7 +5,5 @@ import java.util.List;
 
 public interface RegionClient {
 
-    List<RegionInfoDto> getSpecialRegionNames();
-
-    List<RegionInfoDto> getNormalRegionNames();
+    List<RegionInfoDto> getAllRegions();
 }

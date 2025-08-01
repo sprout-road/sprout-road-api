@@ -15,12 +15,13 @@ public class RegionClientAdapter implements RegionClient {
     private final RegionRepository regionRepository;
 
     @Override
-    public List<RegionInfoDto> getSpecialRegionNames() {
-        return regionRepository.findSpecialRegionNames();
+    public List<RegionInfoDto> getAllRegions() {
+        List<RegionInfoDto> specialRegions = regionRepository.findSpecialRegionNames();
+        specialRegions.addAll(getNormalRegions());
+        return specialRegions;
     }
 
-    @Override
-    public List<RegionInfoDto> getNormalRegionNames() {
+    private List<RegionInfoDto> getNormalRegions() {
         List<RegionInfoDto> normalRegionNames = regionRepository.findNormalRegionNames();
         for (RegionInfoDto regionInfoDto : normalRegionNames) {
             String cityName = regionInfoDto.getRegionName();

@@ -25,14 +25,13 @@ public class GoogleAiConfig {
             throw new RuntimeException("Gemini Client 초기화 실패: " + e.getMessage(), e);
         }
     }
-
     @Bean
     public GenerateContentConfig missionGenerateConfig() {
         return GenerateContentConfig.builder()
-            .temperature(0.1f)      // 매우 낮음 -> JSON 일관성
-            .maxOutputTokens(800)   // 미션 5개에 적당한 크기
-            .topP(0.7f)            // 제한적 선택
-            .topK(10f)              // 매우 제한적
+            .temperature(0.7f)      // 창의성 높임
+            .maxOutputTokens(1000)  // 미션 설명이 더 풍부
+            .topP(0.9f)            // 다양한 선택지 허용
+            .topK(40f)             // 적당히 제한적
             .build();
     }
 }

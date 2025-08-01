@@ -17,8 +17,17 @@ public class SlackTemplate {
         this.webhookUrl = webhookUrl;
     }
 
-    public void send(String text) {
+    public void sendSuccess(String text) {
         Payload payload = Payload.builder().text(text).build();
+        send(payload);
+    }
+
+    public void sendFail(String text) {
+        Payload payload = Payload.builder().text(text).build();
+        send(payload);
+    }
+
+    public void send(Payload payload) {
         try {
             slack.send(webhookUrl, payload);
         } catch (IOException e) {
