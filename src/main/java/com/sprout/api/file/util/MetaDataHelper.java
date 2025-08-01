@@ -1,5 +1,6 @@
 package com.sprout.api.file.util;
 
+import com.sprout.api.common.exception.BusinessException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -19,7 +20,7 @@ public class MetaDataHelper {
 
     private void validateNotEmpty(String originalFilename) {
         if (!StringUtils.hasText(originalFilename)) {
-            throw new IllegalArgumentException();
+            throw new BusinessException(400, "파일 이름이 없음. 잘못된 파일");
         }
     }
 }
