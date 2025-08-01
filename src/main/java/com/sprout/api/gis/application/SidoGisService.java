@@ -1,5 +1,6 @@
 package com.sprout.api.gis.application;
 
+import com.sprout.api.common.exception.BusinessException;
 import com.sprout.api.gis.application.command.ShapefileUploadCommand;
 import com.sprout.api.gis.domain.Sido;
 import com.sprout.api.gis.domain.SidoRepository;
@@ -22,7 +23,7 @@ public class SidoGisService {
     public void uploadSidoShapefile(ShapefileUploadCommand command) {
         shapefileValidator.validate(command);
         if (sidoRepository.count() > 0) {
-            throw new IllegalStateException();
+            throw new BusinessException(400, "이미 지도 정보를 업로드 했음");
         }
 
         List<Sido> entities = sidoGisParser.parse(command);

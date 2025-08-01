@@ -1,5 +1,6 @@
 package com.sprout.api.gis.application;
 
+import com.sprout.api.common.exception.BusinessException;
 import com.sprout.api.gis.application.command.dto.LocationHighlightDto;
 import com.sprout.api.gis.application.result.LocationResult;
 import com.sprout.api.gis.domain.RegionRepository;
@@ -32,11 +33,11 @@ public class LocationService {
 
     private void validateCoordinates(double lat, double lng) {
         if (lat < 33.0 || lat > 39.0) {
-            throw new IllegalArgumentException("유효하지 않은 위도입니다. (33.0 ~ 39.0)");
+            throw new BusinessException(400, "유효하지 않은 위도입니다. (33.0 ~ 39.0)");
         }
 
         if (lng < 124.0 || lng > 132.0) {
-            throw new IllegalArgumentException("유효하지 않은 경도입니다. (124.0 ~ 132.0)");
+            throw new BusinessException(400, "유효하지 않은 경도입니다. (124.0 ~ 132.0)");
         }
     }
 
