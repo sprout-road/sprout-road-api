@@ -1,5 +1,9 @@
 package com.sprout.api.mission.ui;
 
+import com.sprout.api.common.client.ImageManageClient;
+import com.sprout.api.common.client.dto.FileMetaData;
+import com.sprout.api.common.constants.ImagePurpose;
+import com.sprout.api.common.utils.FileMetaDataExtractor;
 import com.sprout.api.mission.application.UserMissionQueryService;
 import com.sprout.api.mission.application.UserMissionService;
 import com.sprout.api.mission.application.command.MissionSubmitCommand;
@@ -8,13 +12,16 @@ import com.sprout.api.mission.application.result.UserDailyMissionResult;
 import com.sprout.api.mission.ui.docs.MissionControllerDocs;
 import com.sprout.api.mission.ui.dto.MissionSubmitRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/missions")
@@ -23,6 +30,8 @@ public class MissionController implements MissionControllerDocs {
 
     private final UserMissionQueryService userMissionQueryService;
     private final UserMissionService userMissionService;
+    private final FileMetaDataExtractor fileMetaDataExtractor;
+    private final ImageManageClient imageManageClient;
 
     @GetMapping("/regions/{regionCode}/status")
     public ResponseEntity<Boolean> getMissionStatus(@PathVariable String regionCode) {
@@ -66,5 +75,12 @@ public class MissionController implements MissionControllerDocs {
         MissionSubmitCommand command = request.toCommand(userId, missionId, regionCode);
         String reward = userMissionService.submitWriting(command);
         return ResponseEntity.ok(reward);
+    }
+
+    @PostMapping(value = "/images/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> uploadImage(@RequestParam MultipartFile imageFile) {
+        FileMetaData imageMetaData = fileMetaDataExtractor.extractFrom(imageFile);
+        String imageUrl = imageManageClient.uploadImage(imageMetaData, ImagePurpose.DAILY_MISSION);
+        return ResponseEntity.ok(imageUrl);
     }
 }
