@@ -9,6 +9,7 @@ import com.sprout.api.mission.application.result.BatchResult;
 import com.sprout.api.mission.infrastructure.GeminiTemplate;
 import com.sprout.api.mission.infrastructure.SlackTemplate;
 import com.sprout.api.mission.utils.AiResponseParser;
+import com.sprout.api.mission.utils.DefaultMissionProvider;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,7 @@ public class SimpleMissionBatchService {
     private final AiResponseParser aiResponseParser;
     private final RegionClient regionClient;
 
-    @Scheduled(cron = "0 0 18 * * ?", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 0 3 * * ?", zone = "Asia/Seoul")
     public void testSpecialCityBatch() {
         try {
             List<RegionInfoDto> allRegions = regionClient.getAllRegions();
@@ -54,10 +55,10 @@ public class SimpleMissionBatchService {
             String prompt = buildMissionPrompt(region.getRegionCode(), region.getRegionName());
             String aiResponse = geminiTemplate.generate(prompt);
             List<AiMissionResponse> missions = aiResponseParser.parseToMissions(aiResponse);
-
             missionService.saveMissions(region.getRegionCode(), missions);
             result.addSuccess(region.getRegionCode());
         } catch (Exception e) {
+            missionService.saveMissions(region.getRegionCode(), DefaultMissionProvider.getDefaultMissions());
             result.addFail(region.getRegionName());
         }
     }

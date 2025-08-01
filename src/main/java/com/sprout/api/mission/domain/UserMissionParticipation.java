@@ -5,8 +5,6 @@ import com.sprout.api.mission.utils.JsonUtils;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -48,16 +46,21 @@ public class UserMissionParticipation extends TimeBaseEntity {
     @Column(nullable = false)
     private LocalDate missionDate;
 
-    @Enumerated(EnumType.STRING)
-    @Builder.Default
-    private ParticipationStatus status = ParticipationStatus.ACTIVE;
-
     @OneToMany(mappedBy = "participation", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<UserMissionDetail> missions = new ArrayList<>();
 
     @Column(columnDefinition = "TEXT")
     @Builder.Default
     private String shownMissionPositions = "[0,1,2,3,4]";
+
+    public static UserMissionParticipation create(Long userId, String regionCode, LocalDate missionDate) {
+        return UserMissionParticipation.builder()
+            .userId(userId)
+            .regionCode(regionCode)
+            .missionDate(missionDate)
+            .build();
+    }
 
     public void addMission(UserMissionDetail mission) {
         missions.add(mission);

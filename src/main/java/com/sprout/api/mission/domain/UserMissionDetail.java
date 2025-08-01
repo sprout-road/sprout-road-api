@@ -12,7 +12,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,10 +40,10 @@ public class UserMissionDetail extends TimeBaseEntity {
     private Long id;
     
     @Column(nullable = false)
-    private Integer position; // 0, 1, 2, 3, 4
+    private Integer position;
     
     @Column(nullable = false, length = 20)
-    private String type; // "picture" or "writing"
+    private String type;
     
     @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
@@ -56,13 +55,19 @@ public class UserMissionDetail extends TimeBaseEntity {
     @Builder.Default
     @Column(nullable = false)
     private Boolean completed = false;
-    
-    private LocalDateTime completedAt;
 
     @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "participation_id", nullable = false)
     private UserMissionParticipation participation;
+
+    public static UserMissionDetail create(int position, String type, String description) {
+        return UserMissionDetail.builder()
+            .position(position)
+            .type(type)
+            .description(description)
+            .build();
+    }
 
     public void refresh(String newType, String newDescription) {
         this.type = newType;
@@ -73,6 +78,5 @@ public class UserMissionDetail extends TimeBaseEntity {
     
     public void complete() {
         this.completed = true;
-        this.completedAt = LocalDateTime.now();
     }
 }
