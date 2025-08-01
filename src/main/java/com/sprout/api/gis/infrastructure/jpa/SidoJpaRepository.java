@@ -1,7 +1,9 @@
 package com.sprout.api.gis.infrastructure.jpa;
 
+import com.sprout.api.common.client.dto.RegionInfoDto;
 import com.sprout.api.gis.application.result.LocationResult;
 import com.sprout.api.gis.domain.Sido;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -94,4 +96,11 @@ public interface SidoJpaRepository extends JpaRepository<Sido, Long> {
         LIMIT 1
         """, nativeQuery = true)
     Optional<LocationResult> findSpecialCityPoint(Double lng, Double lat);
+
+    @Query(value = """
+    SELECT sido_code as regionCode, sido_name_ko as regionName
+    FROM sido
+    WHERE sido_code IN ('11', '26', '27', '28', '29', '30', '31', '36')
+    """, nativeQuery = true)
+    List<RegionInfoDto> findAllSpecialCityNames();
 }

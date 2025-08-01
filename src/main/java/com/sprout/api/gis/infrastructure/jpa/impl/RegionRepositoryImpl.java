@@ -1,16 +1,20 @@
 package com.sprout.api.gis.infrastructure.jpa.impl;
 
+import com.sprout.api.common.client.dto.RegionInfoDto;
 import com.sprout.api.gis.application.result.LocationResult;
 import com.sprout.api.gis.domain.RegionRepository;
 import com.sprout.api.gis.infrastructure.jpa.SidoJpaRepository;
 import com.sprout.api.gis.infrastructure.jpa.SigunguJpaRepository;
 import com.sprout.api.gis.util.GisUtil;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 @Slf4j
 public class RegionRepositoryImpl implements RegionRepository {
 
@@ -39,5 +43,15 @@ public class RegionRepositoryImpl implements RegionRepository {
                 locationResult.setRegionName(regionName + " " + cityName);
                 return locationResult;
             });
+    }
+
+    @Override
+    public List<RegionInfoDto> findSpecialRegionNames() {
+        return sidoJpaRepository.findAllSpecialCityNames();
+    }
+
+    @Override
+    public List<RegionInfoDto> findNormalRegionNames() {
+        return sigunguJpaRepository.findAllNormalCityNames();
     }
 }
