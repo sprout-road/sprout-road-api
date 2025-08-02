@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 - 일반 지역 리워드 이미지 업로드</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .upload-container {
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background: white;
+        }
+        .form-title {
+            color: #2c3e50;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .preview-container {
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+        }
+        .preview-image {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 8px;
+            border: 2px solid #e9ecef;
+        }
+        .upload-btn {
+            background: linear-gradient(45deg, #17a2b8, #20c997);
+            border: none;
+            padding: 12px 30px;
+            font-weight: bold;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(23, 162, 184, 0.3);
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #17a2b8;
+            box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.25);
+        }
+        .alert {
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+        .combo-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .combo-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="bg-light">
+<div class="container">
+    <div class="upload-container">
+        <h2 class="form-title">🌟 일반 지역 리워드 이미지 업로드</h2>
+
+        <!-- 성공/실패 메시지 -->
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            <span th:text="${success}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <form action="/admin/rewards/upload/normal" method="post" enctype="multipart/form-data"
+              onsubmit="return validateForm()">
+
+            <!-- 2단계 지역 선택 -->
+            <div class="mb-4">
+                <label class="form-label fw-bold mb-3">
+                    <i class="bi bi-geo-alt-fill text-info me-2"></i>지역 선택
+                </label>
+
+                <div class="combo-container">
+                    <!-- 1차: 도/시 선택 -->
+                    <div>
+                        <label for="provinceSelect" class="form-label">도/시</label>
+                        <select class="form-select" id="provinceSelect" required onchange="updateCityOptions()">
+                            <option value="">도/시를 선택해주세요</option>
+                            <option th:each="entry : ${normalRegionsMap}"
+                                    th:value="${entry.key}"
+                                    th:text="${entry.key}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- 2차: 시/군/구 선택 -->
+                    <div>
+                        <label for="citySelect" class="form-label">시/군/구</label>
+                        <select class="form-select" id="citySelect" name="regionCode" required disabled>
+                            <option value="">먼저 도/시를 선택해주세요</option>
+                        </select>
+                        <input type="hidden" id="regionName" name="regionName">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 파일 업로드 -->
+            <div class="mb-4">
+                <label for="fileInput" class="form-label fw-bold">
+                    <i class="bi bi-image-fill text-info me-2"></i>리워드 이미지
+                </label>
+                <input type="file" class="form-control form-control-lg" id="fileInput"
+                       name="file" accept="image/*" required onchange="previewImage(this)">
+                <div class="form-text">JPG, PNG, GIF 파일만 업로드 가능합니다. (최대 10MB)</div>
+            </div>
+
+            <!-- 이미지 미리보기 -->
+            <div id="previewContainer" class="preview-container">
+                <p class="fw-bold mb-3">이미지 미리보기</p>
+                <img id="previewImage" class="preview-image" alt="미리보기">
+            </div>
+
+            <!-- 업로드 버튼 -->
+            <div class="d-grid gap-2 mt-4">
+                <button type="submit" class="btn btn-info upload-btn btn-lg">
+                    <i class="bi bi-cloud-upload-fill me-2"></i>이미지 업로드
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 지역 데이터를 JavaScript에서 사용할 수 있도록 -->
+<script th:inline="javascript">
+    const normalRegionsData = /*[[${normalRegionsMap}]]*/ {};
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script>
+    // 도/시 선택 시 시/군/구 옵션 업데이트
+    function updateCityOptions() {
+        const provinceSelect = document.getElementById('provinceSelect');
+        const citySelect = document.getElementById('citySelect');
+        const selectedProvince = provinceSelect.value; // 이제 실제 지역명 (예: "경상남도")
+
+        // 시/군/구 선택박스 초기화
+        citySelect.innerHTML = '<option value="">시/군/구를 선택해주세요</option>';
+        citySelect.disabled = !selectedProvince;
+
+        if (selectedProvince && normalRegionsData[selectedProvince]) {
+            // 선택된 도/시의 시/군/구 데이터로 옵션 추가
+            const regions = normalRegionsData[selectedProvince];
+            regions.forEach(region => {
+                const option = document.createElement('option');
+                option.value = region.regionCode;
+                option.textContent = region.regionName;
+                option.setAttribute('data-region-name', region.regionName);
+                citySelect.appendChild(option);
+            });
+        }
+    }
+
+    // 시/군/구 선택 시 regionName hidden input에 값 설정
+    document.getElementById('citySelect').addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        const regionName = selectedOption.getAttribute('data-region-name');
+        document.getElementById('regionName').value = regionName || '';
+    });
+
+    // 이미지 미리보기 기능
+    function previewImage(input) {
+        const previewContainer = document.getElementById('previewContainer');
+        const previewImage = document.getElementById('previewImage');
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                previewImage.src = e.target.result;
+                previewContainer.style.display = 'block';
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            previewContainer.style.display = 'none';
+        }
+    }
+
+    // 폼 유효성 검사
+    function validateForm() {
+        const provinceSelect = document.getElementById('provinceSelect');
+        const citySelect = document.getElementById('citySelect');
+        const fileInput = document.getElementById('fileInput');
+
+        if (!provinceSelect.value) {
+            alert('도/시를 선택해주세요.');
+            provinceSelect.focus();
+            return false;
+        }
+
+        if (!citySelect.value) {
+            alert('시/군/구를 선택해주세요.');
+            citySelect.focus();
+            return false;
+        }
+
+        if (!fileInput.files || fileInput.files.length === 0) {
+            alert('이미지 파일을 선택해주세요.');
+            fileInput.focus();
+            return false;
+        }
+
+        const file = fileInput.files[0];
+        const maxSize = 10 * 1024 * 1024; // 10MB
+
+        if (file.size > maxSize) {
+            alert('파일 크기는 10MB를 초과할 수 없습니다.');
+            return false;
+        }
+
+        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+        if (!allowedTypes.includes(file.type)) {
+            alert('JPG, PNG, GIF 파일만 업로드 가능합니다.');
+            return false;
+        }
+
+        return true;
+    }
+
+    // 드래그 앤 드롭 기능
+    const fileInput = document.getElementById('fileInput');
+    const uploadContainer = document.querySelector('.upload-container');
+
+    uploadContainer.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        this.style.backgroundColor = '#f8f9fa';
+        this.style.borderColor = '#17a2b8';
+    });
+
+    uploadContainer.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        this.style.backgroundColor = 'white';
+        this.style.borderColor = '#dee2e6';
+    });
+
+    uploadContainer.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.style.backgroundColor = 'white';
+        this.style.borderColor = '#dee2e6';
+
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            fileInput.files = files;
+            previewImage(fileInput);
+        }
+    });
+</script>
+</body>
+</html>
