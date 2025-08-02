@@ -35,4 +35,13 @@ public interface UserMissionRepository extends JpaRepository<UserMissionParticip
         "AND p.missionDate BETWEEN :fromDate AND :toDate " +
         "AND d.completed = true")
     List<Long> findCompletedMissionIdsByUserAndPeriod(Long userId, LocalDate fromDate, LocalDate toDate);
+
+    @Query("SELECT d.id " +
+        "FROM UserMissionParticipation p " +
+        "JOIN p.missions d " +
+        "WHERE p.userId = :userId " +
+        "AND p.regionCode = :regionCode " +
+        "AND p.missionDate BETWEEN :fromDate AND :toDate " +
+        "AND d.completed = true")
+    Long countByPeriod(Long userId, LocalDate from, LocalDate to, String regionCode);
 }

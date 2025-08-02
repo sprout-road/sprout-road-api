@@ -4,5 +4,5 @@ import java.time.LocalDate;
 
 public interface TravelLogClient {
 
-    Long getTravelCountByPeriod(LocalDate from, LocalDate to, Long userId);
+    Long getTravelCountByPeriod(LocalDate from, LocalDate to, Long userId, String regionCode);
 }

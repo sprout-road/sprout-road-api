@@ -10,9 +10,11 @@ import com.sprout.api.travel.application.command.CreateTravelLogCommand;
 import com.sprout.api.travel.application.command.UpdateTravelLogCommand;
 import com.sprout.api.travel.application.result.RegionLogResult;
 import com.sprout.api.travel.application.result.TravelDetailResult;
+import com.sprout.api.travel.application.result.TravelLogSummaryResult;
 import com.sprout.api.travel.ui.docs.TravelLogControllerDocs;
 import com.sprout.api.travel.ui.request.TravelLogCreateRequest;
 import com.sprout.api.travel.ui.request.TravelLogUpdateRequest;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -76,5 +78,17 @@ public class TravelLogController implements TravelLogControllerDocs {
         FileMetaData imageMetaData = fileMetaDataExtractor.extractFrom(imageFile);
         String imageUrl = imageManageClient.uploadImage(imageMetaData, ImagePurpose.TRAVEL_LOG);
         return ResponseEntity.ok(imageUrl);
+    }
+
+    @GetMapping("/users/{userId}/period")
+    public ResponseEntity<List<TravelLogSummaryResult>> getUserTravelLogPeriod(
+        @PathVariable Long userId,
+        @RequestParam LocalDate from,
+        @RequestParam LocalDate to,
+        @RequestParam String regionCode
+    ) {
+        List<TravelLogSummaryResult> result =
+            travelLogQueryService.getTravelLogSummaryByPeriodAndRegion(userId, from, to, regionCode);
+        return ResponseEntity.ok(result);
     }
 }

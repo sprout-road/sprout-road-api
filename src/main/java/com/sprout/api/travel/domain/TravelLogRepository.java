@@ -1,6 +1,6 @@
 package com.sprout.api.travel.domain;
 
-import com.sprout.api.common.client.dto.TravelLogDto;
+import com.sprout.api.travel.application.result.TravelLogSummaryResult;
 import com.sprout.api.travel.application.result.RegionLogResult;
 import java.time.LocalDate;
 import java.util.List;
@@ -17,15 +17,18 @@ public interface TravelLogRepository extends JpaRepository<TravelLog, Long> {
     """)
     List<RegionLogResult> findAllByRegionCodeAndUserId(String regionCode, Long userId);
 
-    @Query("SELECT new com.sprout.api.common.client.dto.TravelLogDto(t.id, t.title) " +
+    @Query("SELECT new com.sprout.api.travel.application.result.TravelLogSummaryResult(t.id, t.title) " +
         "FROM TravelLog t " +
         "WHERE t.userId = :userId " +
+        "AND t.regionCode = :regionCode " +
         "AND t.traveledAt BETWEEN :fromDate AND :toDate")
-    List<TravelLogDto> findTravelLogsByUserAndPeriod(Long userId, LocalDate fromDate, LocalDate toDate);
+    List<TravelLogSummaryResult> findTravelLogsByUserAndPeriod(
+        Long userId, LocalDate fromDate, LocalDate toDate, String regionCode
+    );
 
     @Query("SELECT count(t.id) " +
         "FROM TravelLog t " +
         "WHERE t.userId = :userId " +
         "AND t.traveledAt BETWEEN :fromDate AND :toDate")
-    Long countByPeriod(Long userId, LocalDate from, LocalDate to);
+    Long countByPeriod(Long userId, LocalDate from, LocalDate to, String regionCode);
 }

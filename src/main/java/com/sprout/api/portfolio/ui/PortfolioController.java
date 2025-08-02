@@ -1,12 +1,9 @@
 package com.sprout.api.portfolio.ui;
 
-import com.sprout.api.common.client.MissionClient;
-import com.sprout.api.common.client.TravelLogClient;
 import com.sprout.api.portfolio.application.PortfolioService;
 import com.sprout.api.portfolio.application.result.PortfolioResult;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,9 +22,10 @@ public class PortfolioController {
     public ResponseEntity<PortfolioResult> getUserPortfolioByPeriod(
         @PathVariable Long userId,
         @RequestParam LocalDate from,
-        @RequestParam LocalDate to
+        @RequestParam LocalDate to,
+        @RequestParam String regionCode
     ) {
-        PortfolioResult result = portfolioService.getUserPortfolioByPeriod(userId, from, to);
+        PortfolioResult result = portfolioService.getUserPortfolioByPeriod(userId, from, to, regionCode);
         return ResponseEntity.ok(result);
     }
 }

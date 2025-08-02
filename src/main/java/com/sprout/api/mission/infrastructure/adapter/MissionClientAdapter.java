@@ -15,7 +15,7 @@ public class MissionClientAdapter implements MissionClient {
     private final UserMissionRepository userMissionRepository;
 
     @Override
-    public Long getMissionCountByPeriod(LocalDate from, LocalDate to, Long userId) {
-        return userMissionRepository.countByPeriod(userId, from, to);
+    public Long getMissionCountByPeriod(LocalDate from, LocalDate to, Long userId, String regionCode) {
+        return userMissionRepository.countByPeriod(userId, from, to, regionCode);
     }
 }

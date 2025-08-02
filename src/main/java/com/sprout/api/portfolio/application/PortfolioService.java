@@ -16,9 +16,9 @@ public class PortfolioService {
     private final MissionClient missionClient;
     private final TravelLogClient travelLogClient;
 
-    public PortfolioResult getUserPortfolioByPeriod(Long userId, LocalDate from, LocalDate to) {
-        Long missionCount = missionClient.getMissionCountByPeriod(from, to, userId);
-        Long travelCount = travelLogClient.getTravelCountByPeriod(from, to, userId);
+    public PortfolioResult getUserPortfolioByPeriod(Long userId, LocalDate from, LocalDate to, String regionCode) {
+        Long missionCount = missionClient.getMissionCountByPeriod(from, to, userId, regionCode);
+        Long travelCount = travelLogClient.getTravelCountByPeriod(from, to, userId, regionCode);
         return new PortfolioResult(missionCount, travelCount);
     }
 }
