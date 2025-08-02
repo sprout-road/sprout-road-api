@@ -2,5 +2,5 @@ package com.sprout.api.common.client;
 
 public interface RewardClient {
 
-    String getRegionReward(String regionCode);
+    String provideReward(String regionCode, Long userId);
 }

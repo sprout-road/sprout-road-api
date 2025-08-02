@@ -78,15 +78,14 @@ public class UserMissionService {
 
         UserMissionDetail mission = todayParticipation.getMission(command.missionId());
         mission.submit(command.type(), command.submissionContent());
-        processMissionSideEffect(mission);
-
-        return rewardClient.getRegionReward(command.regionCode());
+        return processMissionSideEffect(mission, command.regionCode(), command.userId());
     }
 
-    private void processMissionSideEffect(UserMissionDetail mission) {
+    private String processMissionSideEffect(UserMissionDetail mission, String regionCode, Long userId) {
         if (mission.isImageMission()) {
             imageManageClient.markImagesAsUsed(List.of(mission.getSubmissionContent()));
         }
+        return rewardClient.provideReward(regionCode, userId);
     }
 
     private static void validateCanSubmission(UserMissionParticipation todayParticipation) {

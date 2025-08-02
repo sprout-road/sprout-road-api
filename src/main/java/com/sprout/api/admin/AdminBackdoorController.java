@@ -18,6 +18,6 @@ public class AdminBackdoorController implements AdminBackdoorControllerDocs {
 
     @PostMapping("/mission/{regionCode}")
     public void createMockMission(@PathVariable String regionCode) {
-        missionService.saveMissions(regionCode, DefaultMissionProvider.getDefaultMissions());
+        missionService.saveTodayMissions(regionCode, DefaultMissionProvider.getDefaultMissions());
     }
 }
