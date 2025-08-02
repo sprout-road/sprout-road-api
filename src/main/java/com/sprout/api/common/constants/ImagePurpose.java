@@ -9,6 +9,7 @@ public enum ImagePurpose {
 
     TRAVEL_LOG("travel_log"),
     DAILY_MISSION("daily_mission"),
+    REWARD("reward"),
     ;
 
     private final String value;
