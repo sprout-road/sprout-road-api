@@ -1,6 +1,7 @@
 package com.sprout.api.mission.domain;
 
 import com.sprout.api.mission.domain.dto.RegionMissionCountDto;
+import com.sprout.api.mission.ui.response.MissionSummaryResponse;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -26,4 +27,24 @@ public interface UserMissionRepository extends JpaRepository<UserMissionParticip
         ORDER BY p.regionCode
         """)
     List<RegionMissionCountDto> findCompletedMissionCountByRegion(Long userId);
+
+    @Query("SELECT new com.sprout.api.mission.ui.response.MissionSummaryResponse(d.id, p.missionDate, d.description) " +
+        "FROM UserMissionParticipation p " +
+        "JOIN p.missions d " +
+        "WHERE p.userId = :userId " +
+        "AND p.regionCode = :regionCode " +
+        "AND p.missionDate BETWEEN :fromDate AND :toDate " +
+        "AND d.completed = true")
+    List<MissionSummaryResponse> findCompletedMissionIdsByUserAndPeriod(
+        Long userId, LocalDate fromDate, LocalDate toDate, String regionCode
+    );
+
+    @Query("SELECT count(d.id) " +
+        "FROM UserMissionParticipation p " +
+        "JOIN p.missions d " +
+        "WHERE p.userId = :userId " +
+        "AND p.regionCode = :regionCode " +
+        "AND p.missionDate BETWEEN :fromDate AND :toDate " +
+        "AND d.completed = true")
+    Long countByPeriod(Long userId, LocalDate fromDate, LocalDate toDate, String regionCode);
 }
