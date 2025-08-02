@@ -1,0 +1,21 @@
+package com.sprout.api.mission.infrastructure.adapter;
+
+import com.sprout.api.common.client.MissionClient;
+import com.sprout.api.mission.domain.UserMissionRepository;
+import java.time.LocalDate;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.geolatte.geom.M;
+import org.springframework.stereotype.Component;
+
+@Component
+@RequiredArgsConstructor
+public class MissionClientAdapter implements MissionClient {
+
+    private final UserMissionRepository userMissionRepository;
+
+    @Override
+    public List<Long> getMissionsByPeriod(LocalDate from, LocalDate to, Long userId) {
+        return userMissionRepository.findCompletedMissionIdsByUserAndPeriod(userId, from, to);
+    }
+}

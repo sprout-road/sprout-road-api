@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface UserMissionRepository extends JpaRepository<UserMissionParticipation, Long> {
 
@@ -26,4 +27,12 @@ public interface UserMissionRepository extends JpaRepository<UserMissionParticip
         ORDER BY p.regionCode
         """)
     List<RegionMissionCountDto> findCompletedMissionCountByRegion(Long userId);
+
+    @Query("SELECT d.id " +
+        "FROM UserMissionParticipation p " +
+        "JOIN p.missions d " +
+        "WHERE p.userId = :userId " +
+        "AND p.missionDate BETWEEN :fromDate AND :toDate " +
+        "AND d.completed = true")
+    List<Long> findCompletedMissionIdsByUserAndPeriod(Long userId, LocalDate fromDate, LocalDate toDate);
 }
