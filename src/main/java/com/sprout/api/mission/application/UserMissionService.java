@@ -85,7 +85,7 @@ public class UserMissionService {
 
     private void processMissionSideEffect(UserMissionDetail mission) {
         if (mission.isImageMission()) {
-            imageManageClient.markImagesAsUsed(List.of(mission.getDescription()));
+            imageManageClient.markImagesAsUsed(List.of(mission.getSubmissionContent()));
         }
     }
 

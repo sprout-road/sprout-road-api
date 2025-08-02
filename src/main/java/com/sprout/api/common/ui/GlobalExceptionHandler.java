@@ -91,6 +91,7 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler
 	public ResponseEntity<String> handleBusinessException(BusinessException exception) {
+		log.error("[ERROR] {}", exception.getMessage());
 		return buildExceptionResponse(exception.getStatusCode(), exception.getMessage());
 	}
 
