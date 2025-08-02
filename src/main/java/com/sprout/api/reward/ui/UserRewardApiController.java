@@ -14,18 +14,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/users/{userId}/rewards")
+@RequestMapping("/api/rewards")
 @RequiredArgsConstructor
 public class UserRewardApiController {
 
     private final RewardRepository rewardRepository;
 
-    @GetMapping
+    @GetMapping("/me")
     public ResponseEntity<UserRewardPageResponse> getUserRewards(
-        @RequestParam(defaultValue = "0") int page
+        @RequestParam(defaultValue = "1", required = false) int page
     ) {
         Long userId = 1L;
-        Pageable pageable = PageRequest.of(page, 12);
+        Pageable pageable = PageRequest.of(page - 1, 12);
         Page<UserRewardDto> userRewards = rewardRepository.findUserRewardsByUserIdOrderByRegionName(userId, pageable);
         UserRewardPageResponse response =
             new UserRewardPageResponse(page, userRewards.getTotalPages(), userRewards.getContent());
