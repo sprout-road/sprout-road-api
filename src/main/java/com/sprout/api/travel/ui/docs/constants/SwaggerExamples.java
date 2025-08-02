@@ -5,7 +5,7 @@ public class SwaggerExamples {
     public static final String TRAVEL_LOG_CREATE_EXAMPLE = """
         {
           "title": "부산 여행",
-          "sigunguCode": "26110", 
+          "regionCode": "26110", 
           "traveledAt": "2025-07-30",
           "contents": [
             {
@@ -30,7 +30,7 @@ public class SwaggerExamples {
     public static final String TRAVEL_LOG_UPDATE_EXAMPLE = """
         {
           "title": "부산 여행",
-          "sigunguCode": "26110", 
+          "regionCode": "26110", 
           "traveledAt": "2025-07-30",
           "contents": [
             {

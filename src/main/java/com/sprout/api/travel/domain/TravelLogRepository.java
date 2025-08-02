@@ -29,6 +29,7 @@ public interface TravelLogRepository extends JpaRepository<TravelLog, Long> {
     @Query("SELECT count(t.id) " +
         "FROM TravelLog t " +
         "WHERE t.userId = :userId " +
+        "AND t.regionCode = :regionCode " +
         "AND t.traveledAt BETWEEN :fromDate AND :toDate")
-    Long countByPeriod(Long userId, LocalDate from, LocalDate to, String regionCode);
+    Long countByPeriod(Long userId, LocalDate fromDate, LocalDate toDate, String regionCode);
 }

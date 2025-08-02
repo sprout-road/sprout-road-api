@@ -32,16 +32,19 @@ public interface UserMissionRepository extends JpaRepository<UserMissionParticip
         "FROM UserMissionParticipation p " +
         "JOIN p.missions d " +
         "WHERE p.userId = :userId " +
+        "AND p.regionCode = :regionCode " +
         "AND p.missionDate BETWEEN :fromDate AND :toDate " +
         "AND d.completed = true")
-    List<Long> findCompletedMissionIdsByUserAndPeriod(Long userId, LocalDate fromDate, LocalDate toDate);
+    List<Long> findCompletedMissionIdsByUserAndPeriod(
+        Long userId, LocalDate fromDate, LocalDate toDate, String regionCode
+    );
 
-    @Query("SELECT d.id " +
+    @Query("SELECT count(d.id) " +
         "FROM UserMissionParticipation p " +
         "JOIN p.missions d " +
         "WHERE p.userId = :userId " +
         "AND p.regionCode = :regionCode " +
         "AND p.missionDate BETWEEN :fromDate AND :toDate " +
         "AND d.completed = true")
-    Long countByPeriod(Long userId, LocalDate from, LocalDate to, String regionCode);
+    Long countByPeriod(Long userId, LocalDate fromDate, LocalDate toDate, String regionCode);
 }
