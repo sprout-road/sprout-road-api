@@ -13,6 +13,7 @@ import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Check;
 
 @Entity
 @Table(name = "images")
@@ -25,9 +26,11 @@ public class ImageEntity extends TimeBaseEntity {
 	private String imageKey;
 
 	@Enumerated(EnumType.STRING)
+	@Check(constraints = "")
 	private ImagePurpose purpose;
 
 	@Enumerated(EnumType.STRING)
+	@Check(constraints = "")
 	private ImageStatus status;
 
 	protected ImageEntity(String imageKey, ImagePurpose purpose) {
