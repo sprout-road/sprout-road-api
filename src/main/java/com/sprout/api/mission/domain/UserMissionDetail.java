@@ -12,7 +12,6 @@ import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,14 +21,10 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "user_mission_details",
-       indexes = {
-           @Index(name = "idx_participation_position", columnList = "participationId, position"),
-           @Index(name = "idx_participation_completed", columnList = "participationId, completed")
-       },
-       uniqueConstraints = {
-           @UniqueConstraint(name = "uk_participation_position",
-                           columnNames = {"participationId", "position"})
-       })
+    indexes = {
+        @Index(name = "idx_participation_completed", columnList = "participationId, completed")
+    }
+)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
