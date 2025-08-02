@@ -39,4 +39,8 @@ public class UserMissionQueryService {
         return userMissionRepository.findByUserIdAndRegionCodeAndMissionDate(userId, regionCode, today)
                 .orElseThrow(() -> new BusinessException(404, "시작된 미션이 없습니다."));
     }
+
+    public void getMissionHistory(Long userId) {
+
+    }
 }

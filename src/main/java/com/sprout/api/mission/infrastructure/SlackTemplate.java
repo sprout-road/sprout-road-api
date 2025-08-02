@@ -26,7 +26,7 @@ public class SlackTemplate {
 
     public void sendBatchStart(int totalRegions) {
         Payload payload = Payload.builder()
-            .text("🚀 미션 배치 작업 시작")
+            .text("🚀 다음날 미션 배치 작업을 시작합니다.")
             .blocks(List.of(
                 SectionBlock.builder()
                     .text(MarkdownTextObject.builder()

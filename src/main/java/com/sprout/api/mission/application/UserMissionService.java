@@ -71,7 +71,7 @@ public class UserMissionService {
         return missionQueryService.getTodayMisisonByPosition(regionCode, newMissionPosition);
     }
 
-    public String submitWriting(MissionSubmitCommand command) {
+    public String submitMission(MissionSubmitCommand command) {
         UserMissionParticipation todayParticipation =
             userMissionQueryService.getTodayParticipation(command.userId(), command.regionCode());
         validateCanSubmission(todayParticipation);

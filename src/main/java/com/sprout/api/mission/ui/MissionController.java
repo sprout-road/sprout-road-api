@@ -9,8 +9,11 @@ import com.sprout.api.mission.application.UserMissionService;
 import com.sprout.api.mission.application.command.MissionSubmitCommand;
 import com.sprout.api.mission.application.command.RefreshCommand;
 import com.sprout.api.mission.application.result.UserDailyMissionResult;
+import com.sprout.api.mission.domain.UserMissionRepository;
+import com.sprout.api.mission.domain.dto.RegionMissionCountDto;
 import com.sprout.api.mission.ui.docs.MissionControllerDocs;
 import com.sprout.api.mission.ui.dto.MissionSubmitRequest;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +33,7 @@ public class MissionController implements MissionControllerDocs {
 
     private final UserMissionQueryService userMissionQueryService;
     private final UserMissionService userMissionService;
+    private final UserMissionRepository userMissionRepository;
     private final FileMetaDataExtractor fileMetaDataExtractor;
     private final ImageManageClient imageManageClient;
 
@@ -66,14 +70,14 @@ public class MissionController implements MissionControllerDocs {
     }
 
     @PostMapping("/{missionId}/regions/{regionCode}/submit")
-    public ResponseEntity<String> submitWriting(
+    public ResponseEntity<String> submit(
         @PathVariable Long missionId,
         @PathVariable String regionCode,
         @RequestBody MissionSubmitRequest request
     ) {
         Long userId = 1L;
         MissionSubmitCommand command = request.toCommand(userId, missionId, regionCode);
-        String reward = userMissionService.submitWriting(command);
+        String reward = userMissionService.submitMission(command);
         return ResponseEntity.ok(reward);
     }
 
@@ -82,5 +86,12 @@ public class MissionController implements MissionControllerDocs {
         FileMetaData imageMetaData = fileMetaDataExtractor.extractFrom(imageFile);
         String imageUrl = imageManageClient.uploadImage(imageMetaData, ImagePurpose.DAILY_MISSION);
         return ResponseEntity.ok(imageUrl);
+    }
+
+    @GetMapping("/history")
+    public ResponseEntity<List<RegionMissionCountDto>> getMissionHistory() {
+        Long userId = 1L;
+        List<RegionMissionCountDto> result = userMissionRepository.findCompletedMissionCountByRegion(userId);
+        return ResponseEntity.ok(result);
     }
 }
