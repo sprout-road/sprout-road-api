@@ -35,7 +35,7 @@ public interface TravelLogControllerDocs {
     @Operation(summary = "여행일지 전용 이미지 업로드")
     ResponseEntity<String> uploadImage(MultipartFile imageFile);
 
-    @Operation(summary = "사용자 기간 별 여행일지 조히 (포트폴리오)")
+    @Operation(summary = "사용자 기간 별 여행일지 조회 (포트폴리오)")
     ResponseEntity<List<TravelLogSummaryResult>> getUserTravelLogPeriod(
         Long userId,
         LocalDate from,

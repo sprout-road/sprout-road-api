@@ -13,6 +13,8 @@ import com.sprout.api.mission.domain.UserMissionRepository;
 import com.sprout.api.mission.domain.dto.RegionMissionCountDto;
 import com.sprout.api.mission.ui.docs.MissionControllerDocs;
 import com.sprout.api.mission.ui.dto.MissionSubmitRequest;
+import com.sprout.api.mission.ui.response.MissionSummaryResponse;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -92,6 +94,18 @@ public class MissionController implements MissionControllerDocs {
     public ResponseEntity<List<RegionMissionCountDto>> getMissionHistory() {
         Long userId = 1L;
         List<RegionMissionCountDto> result = userMissionRepository.findCompletedMissionCountByRegion(userId);
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/users/{userId}/period")
+    public ResponseEntity<?> getUserMissionPeriod(
+        @PathVariable Long userId,
+        @RequestParam LocalDate from,
+        @RequestParam LocalDate to,
+        @RequestParam String regionCode
+    ) {
+        List<MissionSummaryResponse> result
+            = userMissionRepository.findCompletedMissionIdsByUserAndPeriod(userId, from, to, regionCode);
         return ResponseEntity.ok(result);
     }
 }

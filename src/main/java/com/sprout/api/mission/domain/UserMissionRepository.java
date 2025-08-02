@@ -1,12 +1,12 @@
 package com.sprout.api.mission.domain;
 
 import com.sprout.api.mission.domain.dto.RegionMissionCountDto;
+import com.sprout.api.mission.ui.response.MissionSummaryResponse;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 public interface UserMissionRepository extends JpaRepository<UserMissionParticipation, Long> {
 
@@ -28,14 +28,14 @@ public interface UserMissionRepository extends JpaRepository<UserMissionParticip
         """)
     List<RegionMissionCountDto> findCompletedMissionCountByRegion(Long userId);
 
-    @Query("SELECT d.id " +
+    @Query("SELECT new com.sprout.api.mission.ui.response.MissionSummaryResponse(d.id, p.missionDate, d.description) " +
         "FROM UserMissionParticipation p " +
         "JOIN p.missions d " +
         "WHERE p.userId = :userId " +
         "AND p.regionCode = :regionCode " +
         "AND p.missionDate BETWEEN :fromDate AND :toDate " +
         "AND d.completed = true")
-    List<Long> findCompletedMissionIdsByUserAndPeriod(
+    List<MissionSummaryResponse> findCompletedMissionIdsByUserAndPeriod(
         Long userId, LocalDate fromDate, LocalDate toDate, String regionCode
     );
 
