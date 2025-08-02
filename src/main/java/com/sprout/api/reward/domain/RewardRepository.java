@@ -15,7 +15,7 @@ public interface RewardRepository extends JpaRepository<Reward, Long> {
 
     Optional<Reward> findByRegionCode(String regionCode);
 
-    @Query("SELECT new com.sprout.api.reward.ui.dto.UserRewardDto(r.regionName, r.regionCode, ur.count) " +
+    @Query("SELECT new com.sprout.api.reward.ui.dto.UserRewardDto(r.regionName, r.regionCode, ur.count, r.imageUrl) " +
         "FROM Reward r LEFT JOIN UserReward ur ON r = ur.reward AND ur.userId = :userId " +
         "ORDER BY r.regionName")
     Page<UserRewardDto> findUserRewardsByUserIdOrderByRegionName(@Param("userId") Long userId, Pageable pageable);
