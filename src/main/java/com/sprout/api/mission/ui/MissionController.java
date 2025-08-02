@@ -4,7 +4,6 @@ import com.sprout.api.common.client.ImageManageClient;
 import com.sprout.api.common.client.dto.FileMetaData;
 import com.sprout.api.common.constants.ImagePurpose;
 import com.sprout.api.common.utils.FileMetaDataExtractor;
-import com.sprout.api.mission.application.MissionService;
 import com.sprout.api.mission.application.UserMissionQueryService;
 import com.sprout.api.mission.application.UserMissionService;
 import com.sprout.api.mission.application.command.MissionSubmitCommand;
@@ -71,14 +70,14 @@ public class MissionController implements MissionControllerDocs {
     }
 
     @PostMapping("/{missionId}/regions/{regionCode}/submit")
-    public ResponseEntity<String> submitWriting(
+    public ResponseEntity<String> submit(
         @PathVariable Long missionId,
         @PathVariable String regionCode,
         @RequestBody MissionSubmitRequest request
     ) {
         Long userId = 1L;
         MissionSubmitCommand command = request.toCommand(userId, missionId, regionCode);
-        String reward = userMissionService.submitWriting(command);
+        String reward = userMissionService.submitMission(command);
         return ResponseEntity.ok(reward);
     }
 
